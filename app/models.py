@@ -3,8 +3,6 @@ from datetime import datetime
 from app import db
 
 
-# TODO: Lookup how to implement look up tables. Look up how to have single entity joins (participant a)
-
 class Tournament(db.Model):
     """
     Model for a tournament.
@@ -22,9 +20,20 @@ class Match(db.Model):
     """
     match_id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime)
+    participant_a = db.relationship('Participant', back_populates='matches')
+    participant_b = db.relationship('Participant', back_populates='matches')
     participant_a_score = db.Column(db.Integer, default=0)
     participant_b_score = db.Column(db.Integer, default=0)
     match_number = db.Column(db.Integer)
+    match_status = db.relationship('MatchStatus')
+
+
+class MatchStatus(db.Model):
+    """
+    Lookup table for match statuses
+    """
+    match_status_id = db.Column(db.Integer, primary_key=True)
+    match_status_name = db.Column(db.String(255))
 
 
 class Participant(db.Model):
