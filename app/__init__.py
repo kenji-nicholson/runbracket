@@ -10,10 +10,12 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
+from flask_marshmallow import Marshmallow
 
 from config import Config
 
 db = SQLAlchemy()
+ma = Marshmallow()
 migrate = Migrate()
 mail = Mail()
 
@@ -29,6 +31,7 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     db.init_app(app)
+    ma.init_app(app)
     migrate.init_app(app, db)
     mail.init_app(app)
 
