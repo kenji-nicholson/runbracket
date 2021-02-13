@@ -20,3 +20,5 @@ class TournamentAPI(MethodView):
     def put(self, tournament_id):
         pass
 
+
+register_api(TournamentAPI, 'tournament_api', '/tournaments/', pk='tournament_id')

@@ -41,7 +41,7 @@ def create_app(config_class=Config):
     from app.auth_api import bp as auth_api_bp
     app.register_blueprint(auth_api_bp, url_prefix='/auth/api')
 
-    from app.tournament_api import bp as tournament_api_bp
+    from app.api import bp as tournament_api_bp
     app.register_blueprint(tournament_api_bp, url_prefix='/tournament/api')
 
     if not app.debug and not app.testing:
