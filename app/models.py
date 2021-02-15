@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.orm import backref
 
 from app import db
 
@@ -37,13 +37,15 @@ class Match(db.Model):
     match_number = db.Column(db.Integer)
 
     participant_a_id = db.Column(db.Integer, db.ForeignKey('participant.participant_id'))
-    participant_a = db.relationship('Participant', back_ref='matches', foreign_keys=[participant_a_id])
+    participant_a = db.relationship('Participant', backref=backref('matches', lazy='dynamic'),
+                                    foreign_keys=[participant_a_id])
     participant_b_id = db.Column(db.Integer, db.ForeignKey('participant.participant_id'))
-    participant_b = db.relationship('Participant', back_ref='matches', foreign_keys=[participant_b_id])
+    participant_b = db.relationship('Participant', foreign_keys=[participant_b_id])
     match_status_id = db.Column(db.Integer, db.ForeignKey('match_status.match_status_id'))
     match_status = db.relationship('MatchStatus', foreign_keys=[match_status_id])
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.tournament_id'))
-    tournament = db.relationship('Tournament', backref='matches', lazy='dynamic', foreign_keys=[tournament_id])
+    tournament = db.relationship('Tournament', backref=backref('matches', lazy='dynamic'),
+                                 foreign_keys=[tournament_id])
 
 
 class MatchStatus(db.Model):
@@ -64,6 +66,6 @@ class Participant(db.Model):
     seed = db.Column(db.Integer)
 
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.tournament_id'))
-    tournament = db.relationship('Tournament', backref='participants', lazy='dynamic', foreign_keys=[tournament_id])
+    tournament = db.relationship('Tournament', backref='participants', foreign_keys=[tournament_id])
 
 
