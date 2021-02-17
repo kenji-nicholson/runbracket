@@ -19,6 +19,10 @@ if __name__ == '__main__':
     # db.session.add(participant_b)
     # db.session.add(match)
     # db.session.commit()
-    match_schema = MatchSchema(many=True)
-    matches = Match.query.all()
-    pprint(match_schema.dump(matches))
+    # match_schema = MatchSchema(many=True)
+    # matches = Match.query.all()
+    # pprint(match_schema.dump(matches))
+    tournament_schema = TournamentSchema()
+    tournament = {}
+    tournament2 = tournament_schema.load(tournament)
+    pprint(tournament_schema.dump(tournament2))

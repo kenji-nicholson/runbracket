@@ -9,9 +9,12 @@ class Tournament(db.Model):
     """
     Model for a tournament.
     """
+    TOURNAMENT_NAME_LENGTH = 255
+    TOURNAMENT_DESCRIPTION_LENGTH = 500
+
     tournament_id = db.Column(db.Integer, primary_key=True)
-    tournament_name = db.Column(db.String(255))
-    tournament_description = db.Column(db.String(500))
+    tournament_name = db.Column(db.String(TOURNAMENT_NAME_LENGTH))
+    tournament_description = db.Column(db.String(TOURNAMENT_DESCRIPTION_LENGTH))
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     tournament_status_id = db.Column(db.Integer, db.ForeignKey('tournament_status.tournament_status_id'))
@@ -61,8 +64,10 @@ class Participant(db.Model):
     A participant is a single entity participating in a tournament.
     Participants are unique to every tournament since a participant may/may not have a user account tied to it.
     """
+    PARTICIPANT_NAME_LENGTH = 255
+
     participant_id = db.Column(db.Integer, primary_key=True)
-    participant_name = db.Column(db.String(255))
+    participant_name = db.Column(db.String(PARTICIPANT_NAME_LENGTH))
     seed = db.Column(db.Integer)
 
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.tournament_id'))
