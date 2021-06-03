@@ -1,11 +1,13 @@
-import Header from './components/Header'
+import { Button } from "@material-ui/core";
+import NavigationBar from "./components/NavigationBar";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <Header title='Hello'/>
+    <div>
+      <NavigationBar></NavigationBar>
+      <Button contained>This is a button</Button>
     </div>
   );
-}
+};
 
 export default App;
