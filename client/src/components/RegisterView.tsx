@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import useStyles from "../styles";
 import Container from "@material-ui/core/Container";
 
-export default function RegisterView() {
+export const RegisterView: React.FC = () => {
   const classes = useStyles();
 
   return (

@@ -12,11 +12,29 @@ import Typography from "@material-ui/core/Typography";
 import useStyles from "../styles";
 import Container from "@material-ui/core/Container";
 
-export default function LoginView() {
+export interface LoginCredential {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+interface Props {
+
+}
+
+
+export const LoginView: React.FC<Props> = () => {
   const classes = useStyles();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [LoginCredentials, setLoginCredentials] = useState<LoginCredential>({email: "", password: "", rememberMe: false});
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginCredentials(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -39,7 +57,7 @@ export default function LoginView() {
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
@@ -51,10 +69,12 @@ export default function LoginView() {
             name="password"
             type="password"
             autoComplete="current-password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleChange}
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={
+              <Checkbox name="rememberMe" value="remember" color="primary" 
+                onChange={handleChange}/>}
             label="Remember me"
           />
           <Button
@@ -64,7 +84,7 @@ export default function LoginView() {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Log In
           </Button>
           <Grid container>
             <Grid item xs>
@@ -74,7 +94,7 @@ export default function LoginView() {
             </Grid>
             <Grid item>
               <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {"Don't have an account? Click here to register."}
               </Link>
             </Grid>
           </Grid>
