@@ -17,6 +17,7 @@ export interface LoginRequest {
 }
 
 export const authApi = createApi({
+  reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: "https://reqres.in/api",
     prepareHeaders: (headers, { getState }) => {
@@ -35,10 +36,7 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
-    protected: builder.mutation<{ message: string }, void>({
-      query: () => "protected",
-    }),
   }),
 });
 
-export const { useLoginMutation, useProtectedMutation } = authApi;
+export const { useLoginMutation } = authApi;

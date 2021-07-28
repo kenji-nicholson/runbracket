@@ -8,7 +8,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
+import Alert from "./Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import useStyles from "../styles";
@@ -113,6 +113,7 @@ export const LoginView: React.FC<Props> = () => {
                 dispatch(setCredentials(user));
                 push("/");
               } catch (err) {
+                console.log(err);
                 setOpen(true);
               }
             }}
@@ -139,12 +140,12 @@ export const LoginView: React.FC<Props> = () => {
               </Link>
             </Grid>
           </Grid>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error">
+              Incorrect username or password.
+            </Alert>
+          </Snackbar>
         </form>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="error">
-            Incorrect username or password.
-          </Alert>
-        </Snackbar>
       </div>
     </Container>
   );
