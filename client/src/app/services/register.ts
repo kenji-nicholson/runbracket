@@ -10,13 +10,15 @@ export interface UserResponse {
   token: string;
 }
 
-export interface LoginRequest {
+export interface RegisterRequest {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   //rememberMe: boolean;
 }
 
-export const authApi = createApi({
+export const registerApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://reqres.in/api",
     prepareHeaders: (headers, { getState }) => {
@@ -28,7 +30,7 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    login: builder.mutation<UserResponse, LoginRequest>({
+    register: builder.mutation<UserResponse, RegisterRequest>({
       query: (credentials) => ({
         url: "login",
         method: "POST",
@@ -41,4 +43,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useProtectedMutation } = authApi;
+export const { useRegisterMutation, useProtectedMutation } = registerApi;
