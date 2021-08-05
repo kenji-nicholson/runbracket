@@ -34,3 +34,13 @@ class MatchSchema(ma.SQLAlchemySchema):
     participant_b = ma.Nested(ParticipantSchema)
 
 
+class UserSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = User
+        fields = ("public_id", "first_name", "last_name", "display_name")
+
+    participant_a = ma.Nested(ParticipantSchema)
+    participant_b = ma.Nested(ParticipantSchema)
+
+
+

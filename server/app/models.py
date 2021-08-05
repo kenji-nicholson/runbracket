@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import unique
 
 from sqlalchemy.orm import backref
 
@@ -72,5 +73,15 @@ class Participant(db.Model):
 
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.tournament_id'))
     tournament = db.relationship('Tournament', backref='participants', foreign_keys=[tournament_id])
+    
 
-
+class User(db.Model):
+    """
+    A User is a registered account.
+    """
+    user_id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String(50), unique=True)
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    email = db.Column(db.String(255))
+    password = db.Column(db.String(80))
