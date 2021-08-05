@@ -7,6 +7,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
+import SnackBar from "@material-ui/core/Snackbar";
+import Alert from "./Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import useStyles from "../styles";
@@ -18,12 +20,12 @@ import type { RegisterRequest } from "../app/services/register";
 export const RegisterView: React.FC = () => {
   const classes = useStyles();
   const { push } = useHistory();
+  
   const [registerState, setRegisterState] = useState<RegisterRequest>({
-    firstName: "",
-    lastName: "",
     email: "",
     password: "",
   });
+
   const [register, isLoading] = useRegisterMutation();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -36,6 +38,14 @@ export const RegisterView: React.FC = () => {
       [name]: value,
     }));
   };
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -58,6 +68,7 @@ export const RegisterView: React.FC = () => {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -69,6 +80,7 @@ export const RegisterView: React.FC = () => {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -80,6 +92,7 @@ export const RegisterView: React.FC = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -92,6 +105,7 @@ export const RegisterView: React.FC = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handleChange}
               />
             </Grid>
           </Grid>
@@ -103,17 +117,30 @@ export const RegisterView: React.FC = () => {
             className={classes.submit}
             onClick={async (event) => {
               event.preventDefault();
+              try {
+                const response = await register(registerState).unwrap();
+                console.log(response);
+                push("/");
+              } catch (err) {
+                console.log(err);
+                setOpen(true);
+              }
             }}
           >
             Sign Up
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2" onClick={() => {}}>
+              <Link href="#" variant="body2" onClick={() => {push("/login")}}>
                 Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>
+          <SnackBar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error">
+              Incorrect username or password.
+            </Alert>
+          </SnackBar>
         </form>
       </div>
     </Container>
