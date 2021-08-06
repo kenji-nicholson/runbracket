@@ -1,6 +1,6 @@
 /venv/
-/.idea/
 .env
 app.db
 **/__pycache__/
 /logs/
+.idea/
