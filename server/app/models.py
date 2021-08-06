@@ -4,6 +4,7 @@ from enum import unique
 from sqlalchemy.orm import backref
 
 from app import db
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 class Tournament(db.Model):
@@ -80,8 +81,14 @@ class User(db.Model):
     A User is a registered account.
     """
     user_id = db.Column(db.Integer, primary_key=True)
-    public_id = db.Column(db.String(50), unique=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
     email = db.Column(db.String(255))
-    password = db.Column(db.String(80))
+    display_name = db.Column(db.String(50))
+    password_hash = db.Column(db.String(128))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)

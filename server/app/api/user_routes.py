@@ -1,55 +1,56 @@
 """
 Endpoints for tournament related API calls.
 """
-from flask import request, jsonify
+from flask import request, jsonify, url_for
 from flask.views import MethodView
+from app import db
 from app.models import User 
 from app.api.api_functions import register_api, PaginatedAPIMixin
-from app.api.schemas import TournamentSchema, MatchSchema, ParticipantSchema
+from app.api.schemas import UserSchema
 from app.api.errors import bad_request
+from marshmallow import ValidationError
 
-class TournamentParticipantsAPI(MethodView):
-    """
-    Endpoints for managing/viewing participants within a specified tournament.
-    """
 
-    participants_schema = ParticipantSchema(many=True)
-    participant_schema = ParticipantSchema()
-
-    def get(self, tournament_id, participant_id):
-        if participant_id is None:
-            # retrieve all participants for tournament
-            tournament = Tournament.query.get(tournament_id)
-            if not tournament:
-                return bad_request('Tournament does not exist!')
-            return self.participants_schema.dump(tournament.participants)
-        else:
-            # retrieve single participant
-            tournament = Tournament.query.get(tournament_id)
-            if not tournament:
-                return bad_request('Tournament does not exist!')
-            participant = Participant.query.get(participant_id)
-            if not participant:
-                return bad_request('Participant does not exist!')
-            return self.participant_schema.dump(participant)
-
-    def delete(self, tournament_id, participant_id):
-        pass
-
-    def put(self, tournament_id, participant_id):
-        pass
-
-class UserAPI(MethodView):
+class UserAPI(MethodView, PaginatedAPIMixin):
     """
     Endpoints for managing users 
     """
 
+    user_schema = UserSchema()
+    users_schema = UserSchema(many=True)
+
     def get(self, user_id):
         if user_id is None:
-            users = User.query.
-            
-register_api(TournamentAPI, 'tournament_api', '/tournaments/', pk='tournament_id')
-register_api(TournamentMatchesAPI, 'tournament_matches_api', '/tournaments/<int:tournament_id>/matches/',
-             pk='match_id')
-register_api(TournamentParticipantsAPI, 'tournament_participant_api', '/tournaments/<int:tournament_id>/participants/',
-             pk='participant_id')
+            page = request.args.get('page', 1, type=int)
+            per_page = min(request.args.get('per_page', 10, type=int), 100)
+            data = self.get_paginated_collection(User.query, self.users_schema, page, per_page,
+                                                'user_api')
+            return jsonify(data)
+        else:
+            user = User.query.get(user_id)
+            if not user:
+                return bad_request('User does not exist!')
+            return self.user_schema.dump(user)
+
+    def post(self):
+        try:
+            user = self.user_schema.load(request.get_json())
+            if User.query.filter_by(email=user.email, display_name=user.display_name).first():
+                return bad_request('Please use a different email')
+            if
+            user.set_password()
+            db.session.add(user)
+            db.session.commit()
+            response = self.user_schema.dump(user)
+            response.status_code = 201
+            response.headers['Location'] = url_for('api.user_api')
+        except ValidationError as err:
+            return bad_request(err.messages)
+
+    def delete(self, user_id):
+        pass
+
+    def put(self, user_id):
+        pass
+                
+register_api(UserAPI, 'user_api', '/users/', pk='user_id')

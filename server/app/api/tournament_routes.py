@@ -21,14 +21,14 @@ class TournamentAPI(MethodView, PaginatedAPIMixin):
             page = request.args.get('page', 1, type=int)
             per_page = min(request.args.get('per_page', 10, type=int), 100)
             data = self.get_paginated_collection(Tournament.query, self.tournaments_schema, page, per_page,
-                                                 'tournament_api')
+                                                 'api')
             return jsonify(data)
         else:
             tournament = Tournament.query.get(tournament_id)
             if not tournament:
                 return bad_request('Tournament does not exist!')
             return self.tournament_schema.dump(tournament)
-
+        
     def post(self):
         # TODO : Call method for creating tournament bracket
         pass
@@ -101,7 +101,7 @@ class TournamentParticipantsAPI(MethodView):
         pass
 
 
-register_api(TournamentAPI, 'tournament_api', '/tournaments/', pk='tournament_id')
+register_api(TournamentAPI, 'api', '/tournaments/', pk='tournament_id')
 register_api(TournamentMatchesAPI, 'tournament_matches_api', '/tournaments/<int:tournament_id>/matches/',
              pk='match_id')
 register_api(TournamentParticipantsAPI, 'tournament_participant_api', '/tournaments/<int:tournament_id>/participants/',
