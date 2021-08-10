@@ -17,9 +17,9 @@ export interface LoginRequest {
 }
 
 export const authApi = createApi({
-  reducerPath: 'authApi',
+  reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://reqres.in/api",
+    baseUrl: "https://localhost:5000/api",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {

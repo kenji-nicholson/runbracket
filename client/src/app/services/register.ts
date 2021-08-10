@@ -11,15 +11,17 @@ export interface RegisterResponse {
 }
 
 export interface RegisterRequest {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   //rememberMe: boolean;
 }
 
 export const registerApi = createApi({
-  reducerPath: 'registerApi',
+  reducerPath: "registerApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://reqres.in/api",
+    baseUrl: "https:/localhost:5000/api",
   }),
   endpoints: (builder) => ({
     register: builder.mutation<RegisterResponse, RegisterRequest>({

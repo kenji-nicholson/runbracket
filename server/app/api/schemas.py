@@ -4,11 +4,8 @@ from app.models import *
 
 
 class TournamentSchema(Schema):
-    class Meta:
-        model = Tournament
-        fields = ("tournament_id", "date", "tournament_name", "tournament_description")
-        load_instance = True
-
+    tournament_id = fields.Integer()
+    date = fields.DateTime()
     tournament_name = \
         fields.String(required=True, validate=validate.Length(max=Tournament.TOURNAMENT_NAME_LENGTH, min=1))
     tournament_description = \
@@ -16,30 +13,28 @@ class TournamentSchema(Schema):
 
 
 class ParticipantSchema(Schema):
-    class Meta:
-        model = Participant
-        fields = ("participant_id", "participant_name", "seed")
-
+    participant_id = fields.Integer()
     participant_name = \
         fields.String(required=True, validate=validate.Length(max=Participant.PARTICIPANT_NAME_LENGTH, min=1))
+    seed = fields.Integer()
 
 
 class MatchSchema(Schema):
-    class Meta:
-        model = Match
-        fields = ("match_id", "date", "participant_a_score", "participant_b_score", "participant_a", "participant_b",
-                  "match_number")
-
+    match_id = fields.Integer()
+    match_number = fields.Integer()
+    date = fields.DateTime()
+    participant_a_score = fields.Integer()
+    participant_b_score = fields.Integer()
     participant_a = fields.Nested(ParticipantSchema)
     participant_b = fields.Nested(ParticipantSchema)
 
 
 class UserSchema(Schema):
     user_id = fields.Integer()
-    first_name = fields.String(required=True, validate=validate.Length(max=50))
-    last_name = fields.String(required=True, validate=validate.Length(max=50))
-    email = fields.String(required=True, validate=validate.Length(max=255))
-    display_name = fields.String(required=True, validate=validate.Length(max=50))
+    first_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
+    last_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
+    email = fields.String(required=True, validate=validate.Length(max=User.EMAIL_LENGTH))
+    display_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
 
 
 

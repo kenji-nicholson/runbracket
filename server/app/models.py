@@ -80,11 +80,14 @@ class User(db.Model):
     """
     A User is a registered account.
     """
+    NAME_LENGTH = 50
+    EMAIL_LENGTH = 255
+
     user_id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(50))
-    last_name = db.Column(db.String(50))
-    email = db.Column(db.String(255))
-    display_name = db.Column(db.String(50))
+    first_name = db.Column(db.String(NAME_LENGTH))
+    last_name = db.Column(db.String(NAME_LENGTH))
+    email = db.Column(db.String(EMAIL_LENGTH))
+    display_name = db.Column(db.String(NAME_LENGTH))
     password_hash = db.Column(db.String(128))
 
     def set_password(self, password):

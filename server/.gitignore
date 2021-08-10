@@ -3,4 +3,6 @@
 app.db
 **/__pycache__/
 /logs/
-.idea/
+**/.idea
+/.idea/
+/.idea
