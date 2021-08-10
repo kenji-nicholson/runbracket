@@ -1,8 +1,7 @@
 from datetime import datetime
-from enum import unique
 
 from sqlalchemy.orm import backref
-
+from app.api.api_functions import PaginatedAPIMixin
 from app import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -76,7 +75,7 @@ class Participant(db.Model):
     tournament = db.relationship('Tournament', backref='participants', foreign_keys=[tournament_id])
     
 
-class User(db.Model):
+class User(db.Model, PaginatedAPIMixin):
     """
     A User is a registered account.
     """

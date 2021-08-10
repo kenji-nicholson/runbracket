@@ -28,7 +28,7 @@ class PaginatedAPIMixin(object):
     def get_paginated_collection(query, schema, page, per_page, endpoint, **kwargs):
         resources = query.paginate(page, per_page, False)
         data = {
-            'items': schema.dump(resources),
+            'items': schema.dump(resources.items),
             '_meta': {
                 'page': page,
                 'per_page': per_page,

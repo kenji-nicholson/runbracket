@@ -24,7 +24,7 @@ class UserAPI(MethodView, PaginatedAPIMixin):
             page = request.args.get('page', 1, type=int)
             per_page = min(request.args.get('per_page', 10, type=int), 100)
             data = self.get_paginated_collection(User.query, self.users_schema, page, per_page,
-                                                 'user_api')
+                                                 'api.user_api')
             return jsonify(data)
         else:
             user = User.query.get(user_id)
