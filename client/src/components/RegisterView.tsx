@@ -22,6 +22,9 @@ export const RegisterView: React.FC = () => {
   const { push } = useHistory();
   
   const [registerState, setRegisterState] = useState<RegisterRequest>({
+    firstName: "",
+    lastName: "",
+    displayName: "",
     email: "",
     password: "",
   });
@@ -83,6 +86,18 @@ export const RegisterView: React.FC = () => {
                 onChange={handleChange}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="displayName"
+                label="Display Name"
+                name="displayName"
+                onChange={handleChange}
+              />
+            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"

@@ -19,7 +19,7 @@ export interface LoginRequest {
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://localhost:5000/api",
+    baseUrl: "http://localhost:5000/api",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {

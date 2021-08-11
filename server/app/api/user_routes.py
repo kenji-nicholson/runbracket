@@ -1,14 +1,16 @@
 """
 Endpoints for tournament related API calls.
 """
+import sys
 from flask import request, jsonify, url_for
 from flask.views import MethodView
-from app import db
-from app.models import User
-from app.api.api_functions import register_api, PaginatedAPIMixin
-from app.api.schemas import UserSchema
-from app.api.errors import bad_request
 from marshmallow import ValidationError
+
+from app import db
+from app.api.api_functions import register_api, PaginatedAPIMixin
+from app.api.errors import bad_request
+from app.api.schemas import UserSchema
+from app.models import User
 
 
 class UserAPI(MethodView, PaginatedAPIMixin):
@@ -47,7 +49,7 @@ class UserAPI(MethodView, PaginatedAPIMixin):
             response.status_code = 201
             response.headers['Location'] = url_for('api.user_api')
         except ValidationError as err:
-            return bad_request(err.messages)
+            return bad_request('test')
 
     def delete(self, user_id):
         pass

@@ -101,7 +101,7 @@ class TournamentParticipantsAPI(MethodView):
         pass
 
 
-register_api(TournamentAPI, 'api', '/tournaments/', pk='tournament_id')
+register_api(TournamentAPI, 'tournament_api', '/tournaments/', pk='tournament_id')
 register_api(TournamentMatchesAPI, 'tournament_matches_api', '/tournaments/<int:tournament_id>/matches/',
              pk='match_id')
 register_api(TournamentParticipantsAPI, 'tournament_participant_api', '/tournaments/<int:tournament_id>/participants/',

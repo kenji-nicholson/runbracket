@@ -13,6 +13,7 @@ export interface RegisterResponse {
 export interface RegisterRequest {
   firstName: string;
   lastName: string;
+  displayName: string;
   email: string;
   password: string;
   //rememberMe: boolean;
@@ -21,12 +22,12 @@ export interface RegisterRequest {
 export const registerApi = createApi({
   reducerPath: "registerApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https:/localhost:5000/api",
+    baseUrl: "http:/localhost:5000/api",
   }),
   endpoints: (builder) => ({
     register: builder.mutation<RegisterResponse, RegisterRequest>({
       query: (registerRequest) => ({
-        url: "register",
+        url: "users",
         method: "POST",
         body: registerRequest,
       }),
