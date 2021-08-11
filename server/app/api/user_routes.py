@@ -18,7 +18,7 @@ class UserAPI(MethodView, PaginatedAPIMixin):
     Endpoints for managing users 
     """
 
-    user_schema = UserSchema()
+    user_schema = UserSchema(session=db.session)
     users_schema = UserSchema(many=True)
 
     def get(self, user_id):
@@ -32,24 +32,26 @@ class UserAPI(MethodView, PaginatedAPIMixin):
             user = User.query.get(user_id)
             if not user:
                 return bad_request('User does not exist!')
-            return jsonify(self.user_schema.dump(user))
+            return jsonify(self.user_schema.dump(user), file=sys.stderr)
 
     def post(self):
         try:
             data = request.get_json()
             user = self.user_schema.load(data)
+            print(user)
             if User.query.filter_by(email=user.email, display_name=user.display_name).first():
-                return bad_request('Please use a different email')
+                return bad_request('Please use a different email and/or display name.')
             if 'password' not in data:
                 return bad_request('Password is required')
-            user.set_password()
+            user.set_password(data['password'])
             db.session.add(user)
             db.session.commit()
             response = jsonify(self.user_schema.dump(user))
             response.status_code = 201
             response.headers['Location'] = url_for('api.user_api')
+            return response
         except ValidationError as err:
-            return bad_request('test')
+            return bad_request(err.messages)
 
     def delete(self, user_id):
         pass

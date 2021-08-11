@@ -20,11 +20,11 @@ import type { RegisterRequest } from "../app/services/register";
 export const RegisterView: React.FC = () => {
   const classes = useStyles();
   const { push } = useHistory();
-  
+
   const [registerState, setRegisterState] = useState<RegisterRequest>({
-    firstName: "",
-    lastName: "",
-    displayName: "",
+    first_name: "",
+    last_name: "",
+    display_name: "",
     email: "",
     password: "",
   });
@@ -64,11 +64,11 @@ export const RegisterView: React.FC = () => {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="fname"
-                name="firstName"
+                name="first_name"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
+                id="first_name"
                 label="First Name"
                 autoFocus
                 onChange={handleChange}
@@ -79,9 +79,9 @@ export const RegisterView: React.FC = () => {
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
+                id="last_name"
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 autoComplete="lname"
                 onChange={handleChange}
               />
@@ -91,9 +91,9 @@ export const RegisterView: React.FC = () => {
                 variant="outlined"
                 required
                 fullWidth
-                id="displayName"
+                id="display_name"
                 label="Display Name"
-                name="displayName"
+                name="display_name"
                 onChange={handleChange}
               />
             </Grid>
@@ -146,7 +146,13 @@ export const RegisterView: React.FC = () => {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2" onClick={() => {push("/login")}}>
+              <Link
+                href="#"
+                variant="body2"
+                onClick={() => {
+                  push("/login");
+                }}
+              >
                 Already have an account? Sign in
               </Link>
             </Grid>

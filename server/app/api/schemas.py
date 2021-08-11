@@ -1,5 +1,5 @@
-from app import ma
-from marshmallow import Schema, fields, validate
+from marshmallow import Schema, fields, validate, EXCLUDE
+from marshmallow_sqlalchemy import SQLAlchemySchema
 from app.models import *
 
 
@@ -29,7 +29,12 @@ class MatchSchema(Schema):
     participant_b = fields.Nested(ParticipantSchema)
 
 
-class UserSchema(Schema):
+class UserSchema(SQLAlchemySchema):
+    class Meta:
+        model = User
+        unknown = EXCLUDE
+        load_instance = True
+
     user_id = fields.Integer()
     first_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
     last_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
