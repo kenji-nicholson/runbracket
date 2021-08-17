@@ -16,4 +16,5 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = os.environ.get('ADMINS')
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
+    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
 

@@ -38,8 +38,13 @@ class UserSchema(SQLAlchemySchema):
     user_id = fields.Integer()
     first_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
     last_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
-    email = fields.String(required=True, validate=validate.Length(max=User.EMAIL_LENGTH))
+    email = fields.Email(required=True, validate=validate.Length(max=User.EMAIL_LENGTH))
     display_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
+
+
+class LoginSchema(Schema):
+    email = fields.String(required=True)
+    password = fields.String(required=True)
 
 
 

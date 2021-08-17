@@ -11,6 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 from config import Config
 
@@ -18,6 +19,8 @@ db = SQLAlchemy()
 migrate = Migrate()
 mail = Mail()
 cors = CORS()
+jwt = JWTManager()
+
 
 def create_app(config_class=Config):
     """
@@ -33,6 +36,7 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     mail.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
+    jwt.init_app(app)
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
