@@ -1,11 +1,13 @@
 import {
-  AppBar,
   Theme,
+  AppBar,
   Toolbar,
   Typography,
   useScrollTrigger,
 } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { alpha } from "@material-ui/core/styles";
+import makeStyles from "@material-ui/styles/makeStyles";
+import createStyles from "@material-ui/styles/createStyles";
 import { useState, useEffect, useRef } from "react";
 import React from "react";
 
@@ -17,10 +19,20 @@ const useStyles = makeStyles((theme: Theme) =>
         duration: theme.transitions.duration.standard,
       }),
     },
-    appBarScrolled: {
-    },
+    appBarScrolled: {},
     appBarNotScrolled: {
-      backgroundColor: "transparent",
+      background: "transparent",
+    },
+    logoFont: {
+      fontWeight: 500,
+    },
+    logo: {
+      color: theme.palette.primary.main,
+      fontWeight: 500,
+    },
+    logo2: {
+      color: theme.palette.text.primary,
+      fontWeight: 500,
     },
   })
 );
@@ -44,7 +56,18 @@ const NavigationBar = () => {
       }`}
     >
       <Toolbar>
-        <Typography >RunBracket</Typography>
+        <Typography
+          variant="h5"
+          className={`${classes.logoFont} ${classes.logo2}`}
+        >
+          RUN
+        </Typography>
+        <Typography
+          variant="h5"
+          className={`${classes.logoFont} ${classes.logo}`}
+        >
+          BRACKET
+        </Typography>
       </Toolbar>
     </AppBar>
   );

@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/styles";
+import { Theme } from "@material-ui/core";
 import App from "./App";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
@@ -12,8 +13,7 @@ ReactDOM.render(
     <Router>
       <React.StrictMode>
         <ThemeProvider theme={theme}>
-        <App />
-
+          <App />
         </ThemeProvider>
       </React.StrictMode>
     </Router>
