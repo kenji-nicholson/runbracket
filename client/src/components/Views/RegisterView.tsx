@@ -8,14 +8,14 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import SnackBar from "@material-ui/core/Snackbar";
-import Alert from "./Alert";
+import Alert from "../Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import useStyles from "../styles";
+import useStyles from "../../styles";
 import Container from "@material-ui/core/Container";
-import { useRegisterMutation } from "../app/services/register";
+import { useRegisterMutation } from "../../app/services/register";
 import { useHistory } from "react-router";
-import type { RegisterRequest } from "../app/services/register";
+import type { RegisterRequest } from "../../app/services/register";
 
 export const RegisterView: React.FC = () => {
   const classes = useStyles();

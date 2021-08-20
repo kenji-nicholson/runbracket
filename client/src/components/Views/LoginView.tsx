@@ -8,16 +8,16 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import { Snackbar } from "@material-ui/core";
-import Alert from "./Alert";
+import Alert from "../Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import useStyles from "../styles";
+import useStyles from "../../styles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router";
-import { useAppDispatch } from "../hooks/store";
-import { setCredentials } from "../app/slices/authSlice";
-import { useLoginMutation } from "../app/services/auth";
-import type { LoginRequest } from "../app/services/auth";
+import { useAppDispatch } from "../../hooks/store";
+import { setCredentials } from "../../app/slices/authSlice";
+import { useLoginMutation } from "../../app/services/auth";
+import type { LoginRequest } from "../../app/services/auth";
 
 interface Props {}
 

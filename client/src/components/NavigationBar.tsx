@@ -18,10 +18,8 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
     },
     appBarScrolled: {
-      boxShadow: "1",
     },
     appBarNotScrolled: {
-      boxShadow: "none",
       backgroundColor: "transparent",
     },
   })
@@ -46,7 +44,7 @@ const NavigationBar = () => {
       }`}
     >
       <Toolbar>
-        <Typography>PP3</Typography>
+        <Typography >RunBracket</Typography>
       </Toolbar>
     </AppBar>
   );
