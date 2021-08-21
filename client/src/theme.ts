@@ -1,12 +1,14 @@
-import { createTheme, Theme, adaptV4Theme } from "@material-ui/core/styles";
-import { indigo } from "@material-ui/core/colors"
+import { createTheme, Theme } from "@material-ui/core/styles";
 
-const theme: Theme= createTheme(adaptV4Theme({
-    palette: {
-        primary: {
-        main: indigo[800]
-        }
-    }
-}));
+const theme: Theme = createTheme({
+  palette: {
+    primary: {
+      main: "#3b2483",
+    },
+    secondary: {
+      main: "#f57c00",
+    },
+  },
+});
 
 export default theme;
