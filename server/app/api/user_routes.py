@@ -72,7 +72,7 @@ def login():
         user = User.query.filter_by(email=credentials['email']).first()
         if user and user.check_password(credentials['password']):
             access_token = create_access_token(identity=user.display_name)
-            return jsonify(user_schema.dump(user), access_token)
+            return jsonify(user=user_schema.dump(user), token=access_token)
         return unauthorized('Username or password is incorrect')
     except ValidationError as err:
         return bad_request(err.messages)

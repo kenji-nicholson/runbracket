@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import { styled } from "@material-ui/core/styles";
 import React from "react";
 import background from "./background.png";
@@ -21,23 +21,32 @@ export const HeroSection: React.FC<Props> = () => {
   return (
     <HeroGrid
       container
-      spacing={0}
       alignContent="center"
       justifyContent="center"
+      alignItems="center"
       direction="column"
+      paddingBottom={20}
     >
       <Grid item>
         <Typography
           component="h1"
           variant="h1"
-          gutterBottom
+          align="center"
           sx={{ fontWeight: 400, color: "primary.contrastText" }}
         >
           Run it back.
         </Typography>
       </Grid>
+      <Grid item sx={{ color: "primary.contrastText" }}>
+        <Typography align="center" variant="h5" paragraph>
+          With a special twist on the classic tournament structure, claim your
+          spot at the top.
+        </Typography>
+      </Grid>
       <Grid item>
-        <Typography variant="h5"></Typography>
+        <Button variant="contained" color="secondary">
+          Create Tournament
+        </Button>
       </Grid>
     </HeroGrid>
   );

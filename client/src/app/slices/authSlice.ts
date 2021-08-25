@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import type { User } from "../services/auth";
 
 type AuthState = {
+  user: User | null;
   token: string | null;
 };
 
@@ -12,9 +13,14 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (
       state,
-      { payload: { token } }: PayloadAction<{ token: string }>
+      { payload: { user, token } }: PayloadAction<{ user: User; token: string }>
     ) => {
+      state.user = user;
       state.token = token;
+    },
+    logOut: (state) => {
+      state.user = null;
+      state.token = null;
     },
   },
 });
