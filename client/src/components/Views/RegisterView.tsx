@@ -3,7 +3,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import SnackBar from "@material-ui/core/Snackbar";
 import Alert from "../Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
@@ -17,6 +16,7 @@ import Container from "@material-ui/core/Container";
 import { useRegisterMutation } from "../../app/services/register";
 import { useHistory } from "react-router";
 import type { RegisterRequest } from "../../app/services/register";
+import { Helmet } from "react-helmet";
 
 export const RegisterView: React.FC = () => {
   const { push } = useHistory();
@@ -29,7 +29,7 @@ export const RegisterView: React.FC = () => {
     password: "",
   });
 
-  const [register, isLoading] = useRegisterMutation();
+  const [register] = useRegisterMutation();
   const [open, setOpen] = useState<boolean>(false);
 
   const handleChange = (
@@ -51,6 +51,9 @@ export const RegisterView: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xs">
+      <Helmet>
+        <title>RunBracket - Register</title>
+      </Helmet>
       <CssBaseline />
       <UserInfoContainer>
         <UserInfoAvatar>
@@ -160,7 +163,7 @@ export const RegisterView: React.FC = () => {
             open={open}
             handleClose={handleClose}
             severity="error"
-            message="Incorrect username or password."
+            message="Oops! Please check the input above for errors."
           ></Alert>
         </UserInfoForm>
       </UserInfoContainer>

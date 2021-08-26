@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Snackbar from "@material-ui/core/Snackbar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import {
@@ -19,6 +17,7 @@ import { useAppDispatch } from "../../hooks/store";
 import { setCredentials } from "../../app/slices/authSlice";
 import { useLoginMutation } from "../../app/services/auth";
 import type { LoginRequest } from "../../app/services/auth";
+import { Helmet } from "react-helmet";
 import Alert from "../Alert";
 
 interface Props {}
@@ -34,7 +33,7 @@ export const LoginView: React.FC<Props> = () => {
   });
   const [open, setOpen] = useState<boolean>(false);
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -55,6 +54,9 @@ export const LoginView: React.FC<Props> = () => {
 
   return (
     <Container component="main" maxWidth="xs">
+      <Helmet>
+        <title>RunBracket - Login</title>
+      </Helmet>
       <CssBaseline />
       <UserInfoContainer>
         <UserInfoAvatar>

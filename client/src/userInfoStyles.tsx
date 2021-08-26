@@ -6,6 +6,7 @@ export const UserInfoContainer = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
+  paddingTop: 20,
 }));
 
 export const UserInfoAvatar = styled(Avatar)(({ theme }) => ({

@@ -25,7 +25,6 @@ export const HeroSection: React.FC<Props> = () => {
       justifyContent="center"
       alignItems="center"
       direction="column"
-      paddingBottom={20}
     >
       <Grid item>
         <Typography
