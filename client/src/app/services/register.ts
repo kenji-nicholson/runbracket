@@ -24,7 +24,7 @@ export const registerApi = createApi({
     baseUrl: process.env.REACT_APP_API_URL,
   }),
   endpoints: (builder) => ({
-    register: builder.mutation<RegisterResponse, RegisterRequest>({
+    signUp: builder.mutation<RegisterResponse, RegisterRequest>({
       query: (registerRequest) => ({
         url: "users/",
         method: "POST",
@@ -34,4 +34,4 @@ export const registerApi = createApi({
   }),
 });
 
-export const { useRegisterMutation } = registerApi;
+export const { useSignUpMutation } = registerApi;

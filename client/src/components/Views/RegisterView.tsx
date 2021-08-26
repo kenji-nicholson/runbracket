@@ -11,42 +11,55 @@ import {
   UserInfoContainer,
   UserInfoForm,
   UserInfoSubmit,
-} from "../../userInfoStyles";
+} from "../Forms/userInfoStyles";
 import Container from "@material-ui/core/Container";
-import { useRegisterMutation } from "../../app/services/register";
+import { useSignUpMutation } from "../../app/services/register";
 import { useHistory } from "react-router";
 import type { RegisterRequest } from "../../app/services/register";
 import { Helmet } from "react-helmet";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { string, object, number, SchemaOf } from "yup";
+import { ErrorSharp } from "@material-ui/icons";
+import { FormTextField } from "../Forms/FormComponents";
 
 export const RegisterView: React.FC = () => {
-  const { push } = useHistory();
-
-  const [registerState, setRegisterState] = useState<RegisterRequest>({
-    first_name: "",
-    last_name: "",
-    display_name: "",
-    email: "",
-    password: "",
+  const validationSchema = object().shape({
+    first_name: string().required("First name is required."),
+    last_name: string().required("Last name is required."),
+    display_name: string().required("Field is required."),
+    email: string()
+      .required("Email address is required.")
+      .email("Not a valid email."),
+    password: string().required(),
   });
 
-  const [register] = useRegisterMutation();
-  const [open, setOpen] = useState<boolean>(false);
+  const { push } = useHistory();
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    setRegisterState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const { handleSubmit, control } = useForm<RegisterRequest>({
+    resolver: yupResolver(validationSchema),
+  });
+
+  const [signUp] = useSignUpMutation();
+
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
       return;
     }
     setOpen(false);
+  };
+
+  const onSubmit = async (data: RegisterRequest) => {
+    try {
+      const response = await signUp(data).unwrap();
+      console.log(response);
+      push("/");
+    } catch (err) {
+      console.log(err);
+      setOpen(true);
+    }
   };
 
   return (
@@ -62,68 +75,48 @@ export const RegisterView: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <UserInfoForm>
+        <UserInfoForm onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
+              <FormTextField
                 name="first_name"
-                variant="outlined"
-                required
-                fullWidth
-                id="first_name"
                 label="First Name"
+                control={control}
+                autoComplete="fname"
                 autoFocus
-                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="last_name"
-                label="Last Name"
+              <FormTextField
                 name="last_name"
+                label="Last Name"
+                control={control}
                 autoComplete="lname"
-                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="display_name"
-                label="Display Name"
+              <FormTextField
                 name="display_name"
-                onChange={handleChange}
+                label="Display Name"
+                control={control}
               />
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
+              <FormTextField
                 name="email"
+                label="Email"
+                control={control}
                 autoComplete="email"
-                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
+              <FormTextField
                 name="password"
                 label="Password"
-                type="password"
-                id="password"
+                control={control}
                 autoComplete="current-password"
-                onChange={handleChange}
+                type="password"
               />
             </Grid>
           </Grid>
@@ -132,17 +125,6 @@ export const RegisterView: React.FC = () => {
             fullWidth
             variant="contained"
             color="primary"
-            onClick={async (event) => {
-              event.preventDefault();
-              try {
-                const response = await register(registerState).unwrap();
-                console.log(response);
-                push("/");
-              } catch (err) {
-                console.log(err);
-                setOpen(true);
-              }
-            }}
           >
             Sign Up
           </UserInfoSubmit>
@@ -163,7 +145,7 @@ export const RegisterView: React.FC = () => {
             open={open}
             handleClose={handleClose}
             severity="error"
-            message="Oops! Please check the input above for errors."
+            message="Oops! There was a problem."
           ></Alert>
         </UserInfoForm>
       </UserInfoContainer>
