@@ -16,6 +16,7 @@ class Tournament(db.Model):
     tournament_id = db.Column(db.Integer, primary_key=True)
     tournament_name = db.Column(db.String(TOURNAMENT_NAME_LENGTH))
     tournament_description = db.Column(db.String(TOURNAMENT_DESCRIPTION_LENGTH))
+    is_seeded = db.Column(db.Boolean(), default=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     tournament_status_id = db.Column(db.Integer, db.ForeignKey('tournament_status.tournament_status_id'))
@@ -35,10 +36,12 @@ class Match(db.Model):
     A match always belongs to a tournament.
     """
     match_id = db.Column(db.Integer, primary_key=True)
+    winner_match_id = db.Column(db.Integer, db.ForeignKey('match.match_id'))
+    round = db.Column(db.Integer)
     date = db.Column(db.DateTime)
+
     participant_a_score = db.Column(db.Integer, default=0)
     participant_b_score = db.Column(db.Integer, default=0)
-    match_number = db.Column(db.Integer)
 
     participant_a_id = db.Column(db.Integer, db.ForeignKey('participant.participant_id'))
     participant_a = db.relationship('Participant', backref=backref('matches', lazy='dynamic'),
