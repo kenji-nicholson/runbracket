@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Snackbar from "@material-ui/core/Snackbar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import {
@@ -12,39 +10,37 @@ import {
   UserInfoContainer,
   UserInfoForm,
   UserInfoSubmit,
-} from "../../userInfoStyles";
+} from "../Forms/userInfoStyles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router";
 import { useAppDispatch } from "../../hooks/store";
 import { setCredentials } from "../../app/slices/authSlice";
 import { useLoginMutation } from "../../app/services/auth";
 import type { LoginRequest } from "../../app/services/auth";
+import { Helmet } from "react-helmet";
 import Alert from "../Alert";
+import { string, object } from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { FormTextField } from "../Forms/FormComponents";
 
 interface Props {}
 
 export const LoginView: React.FC<Props> = () => {
+  const validationSchema = object().shape({
+    email: string().required("Email is required.").email("Not a valid email."),
+    password: string().required("Password is required."),
+  });
+
+  const { handleSubmit, control } = useForm<LoginRequest>({
+    resolver: yupResolver(validationSchema),
+  });
   const dispatch = useAppDispatch();
   const { push } = useHistory();
 
-  const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({
-    email: "",
-    password: "",
-    //rememberMe: false,
-  });
   const [open, setOpen] = useState<boolean>(false);
 
-  const [login, { isLoading }] = useLoginMutation();
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    setLoginCredentials((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const [login] = useLoginMutation();
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
@@ -53,8 +49,22 @@ export const LoginView: React.FC<Props> = () => {
     setOpen(false);
   };
 
+  const onSubmit = async (data: LoginRequest) => {
+    try {
+      const user = await login(data).unwrap();
+      dispatch(setCredentials(user));
+      push("/");
+    } catch (err) {
+      console.log(err);
+      setOpen(true);
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
+      <Helmet>
+        <title>RunBracket - Login</title>
+      </Helmet>
       <CssBaseline />
       <UserInfoContainer>
         <UserInfoAvatar>
@@ -63,34 +73,24 @@ export const LoginView: React.FC<Props> = () => {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <UserInfoForm>
+        <UserInfoForm onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
+              <FormTextField
                 name="email"
+                label="Email"
+                control={control}
                 autoComplete="email"
                 autoFocus
-                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="password"
-                label="Password"
+              <FormTextField
                 name="password"
-                type="password"
+                label="password"
+                control={control}
                 autoComplete="current-password"
-                onChange={handleChange}
+                type="password"
               />
             </Grid>
           </Grid>
@@ -99,17 +99,6 @@ export const LoginView: React.FC<Props> = () => {
             fullWidth
             variant="contained"
             color="primary"
-            onClick={async (event) => {
-              event.preventDefault();
-              try {
-                const user = await login(loginCredentials).unwrap();
-                dispatch(setCredentials(user));
-                push("/");
-              } catch (err) {
-                console.log(err);
-                setOpen(true);
-              }
-            }}
           >
             Log In
           </UserInfoSubmit>
