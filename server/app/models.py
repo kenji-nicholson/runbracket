@@ -17,18 +17,8 @@ class Tournament(db.Model):
     tournament_name = db.Column(db.String(TOURNAMENT_NAME_LENGTH))
     tournament_description = db.Column(db.String(TOURNAMENT_DESCRIPTION_LENGTH))
     is_seeded = db.Column(db.Boolean(), default=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    tournament_status_id = db.Column(db.Integer, db.ForeignKey('tournament_status.tournament_status_id'))
-    tournament_status = db.relationship('TournamentStatus', foreign_keys=[tournament_status_id])
-
-
-class TournamentStatus(db.Model):
-    """
-    Lookup table for tournament statuses
-    """
-    tournament_status_id = db.Column(db.Integer, primary_key=True)
-    tournament_status_name = db.Column(db.String(255))
+    date = db.Column(db.DateTime(), default=datetime.utcnow)
+    status = db.Column(db.Enum('not_started', 'in_progress', 'complete'))
 
 
 class Match(db.Model):
@@ -48,19 +38,10 @@ class Match(db.Model):
                                     foreign_keys=[participant_a_id])
     participant_b_id = db.Column(db.Integer, db.ForeignKey('participant.participant_id'))
     participant_b = db.relationship('Participant', foreign_keys=[participant_b_id])
-    match_status_id = db.Column(db.Integer, db.ForeignKey('match_status.match_status_id'))
-    match_status = db.relationship('MatchStatus', foreign_keys=[match_status_id])
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.tournament_id'))
     tournament = db.relationship('Tournament', backref=backref('matches', lazy='dynamic'),
                                  foreign_keys=[tournament_id])
-
-
-class MatchStatus(db.Model):
-    """
-    Lookup table for match statuses
-    """
-    match_status_id = db.Column(db.Integer, primary_key=True)
-    match_status_name = db.Column(db.String(255))
+    status = db.Column(db.Enum('not_started', 'in_progress', 'completed'))
 
 
 class Participant(db.Model):
