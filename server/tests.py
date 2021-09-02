@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # match_schema = MatchSchema(many=True)
     # matches = Match.query.all()
     # pprint(match_schema.dump(matches))
-    tournament_schema = TournamentSchema()
+    tournament_schema = TournamentInfoSchema()
     tournament = {}
     tournament2 = tournament_schema.load(tournament)
     pprint(tournament_schema.dump(tournament2))

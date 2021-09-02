@@ -3,16 +3,12 @@ from marshmallow_sqlalchemy import SQLAlchemySchema
 from app.models import *
 
 
-class TournamentSchema(Schema):
-    tournament_id = fields.Integer()
-    date = fields.DateTime()
-    tournament_name = \
-        fields.String(required=True, validate=validate.Length(max=Tournament.TOURNAMENT_NAME_LENGTH, min=1))
-    tournament_description = \
-        fields.String(validate=validate.Length(max=Tournament.TOURNAMENT_DESCRIPTION_LENGTH))
-
-
 class ParticipantSchema(Schema):
+    class Meta:
+        model = Participant
+        unknown = EXCLUDE
+        load_instance = True
+
     participant_id = fields.Integer()
     participant_name = \
         fields.String(required=True, validate=validate.Length(max=Participant.PARTICIPANT_NAME_LENGTH, min=1))
@@ -20,6 +16,11 @@ class ParticipantSchema(Schema):
 
 
 class MatchSchema(Schema):
+    class Meta:
+        model = Match
+        unknown = EXCLUDE
+        load_instance = True
+
     match_id = fields.Integer()
     match_number = fields.Integer()
     date = fields.DateTime()
@@ -27,6 +28,23 @@ class MatchSchema(Schema):
     participant_b_score = fields.Integer()
     participant_a = fields.Nested(ParticipantSchema)
     participant_b = fields.Nested(ParticipantSchema)
+
+
+class TournamentSchema(SQLAlchemySchema):
+    class Meta:
+        model = Tournament
+        unknown = EXCLUDE
+        load_instance = True
+
+    tournament_id = fields.Integer()
+    tournament_name = \
+        fields.String(required=True, validate=validate.Length(max=Tournament.TOURNAMENT_NAME_LENGTH, min=1))
+    tournament_description = \
+        fields.String(required=True, validate=validate.Length(max=Tournament.TOURNAMENT_DESCRIPTION_LENGTH))
+    is_seeded = fields.Boolean(required=True)
+    date = fields.DateTime()
+    matches = fields.Nested(MatchSchema)
+    participants = fields.Nested(ParticipantSchema, required=True)
 
 
 class UserSchema(SQLAlchemySchema):
