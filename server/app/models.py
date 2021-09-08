@@ -20,6 +20,7 @@ class Tournament(db.Model):
     TOURNAMENT_NAME_LENGTH = 255
     TOURNAMENT_DESCRIPTION_LENGTH = 500
 
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     tournament_id = db.Column(db.Integer, primary_key=True)
     tournament_name = db.Column(db.String(TOURNAMENT_NAME_LENGTH))
     tournament_description = db.Column(db.String(TOURNAMENT_DESCRIPTION_LENGTH))

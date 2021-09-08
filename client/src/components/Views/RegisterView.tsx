@@ -31,7 +31,7 @@ export const RegisterView: React.FC = () => {
     email: string()
       .required("Email address is required.")
       .email("Not a valid email."),
-    password: string().required(),
+    password: string().required("Password is required."),
   });
 
   const { push } = useHistory();

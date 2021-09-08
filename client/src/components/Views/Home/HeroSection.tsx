@@ -1,6 +1,7 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import { styled } from "@material-ui/core/styles";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import background from "./background.png";
 
 const HeroGrid = styled(Grid)(({ theme }) => ({
@@ -18,6 +19,7 @@ const HeroGrid = styled(Grid)(({ theme }) => ({
 interface Props {}
 
 export const HeroSection: React.FC<Props> = () => {
+  const { push } = useHistory();
   return (
     <HeroGrid
       container
@@ -43,7 +45,13 @@ export const HeroSection: React.FC<Props> = () => {
         </Typography>
       </Grid>
       <Grid item>
-        <Button variant="contained" color="secondary">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            push("/tournament/new");
+          }}
+        >
           Create Tournament
         </Button>
       </Grid>

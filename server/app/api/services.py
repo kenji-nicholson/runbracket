@@ -5,15 +5,17 @@ from app import db
 from collections import deque
 
 
-def create_tournament(tournament, participants):
+def create_tournament(tournament):
     """
     Code for creating a tournament from a JSON request.
     """
     with db.session.begin():
+        participants = tournament.participants
         tournament_id = _insert_tournament(tournament)
         inserted_participants = _insert_participants(participants, tournament_id)
         matches = _create_matches(inserted_participants, tournament.is_seeded, tournament_id)
         advance_byes(tournament_id)
+        db.session.commit()
         return Tournament.query.get(tournament_id)
 
 

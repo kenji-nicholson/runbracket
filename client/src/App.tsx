@@ -4,6 +4,8 @@ import HomeView from "./components/Views/Home/HomeView";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 import { Switch, Route } from "react-router-dom";
 import { CssBaseline } from "@material-ui/core";
+import CreateTournamentView from "./components/Views/CreateTournament/CreateTournamentView";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +16,11 @@ const App: React.FC = () => {
         <Route exact component={LoginView} path="/login" />
         <Route exact component={RegisterView} path="/register" />
         <Route exact component={HomeView} path="/" />
+        <ProtectedRoute
+          exact
+          component={CreateTournamentView}
+          path="/tournament/new"
+        />
       </Switch>
     </>
   );

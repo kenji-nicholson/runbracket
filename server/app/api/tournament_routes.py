@@ -1,8 +1,11 @@
 """
 Endpoints for tournament related API calls.
 """
-from flask import request, jsonify
+from flask import request, jsonify, url_for
 from flask.views import MethodView
+from marshmallow import ValidationError
+
+from app.api.services import create_tournament
 from app.models import Tournament, Match, Participant
 from app.api.api_functions import register_api, PaginatedAPIMixin
 from app.api.schemas import TournamentSchema, MatchSchema, ParticipantSchema
@@ -30,8 +33,16 @@ class TournamentAPI(MethodView, PaginatedAPIMixin):
             return self.tournament_schema.dump(tournament)
         
     def post(self):
-        # TODO : Call method for creating tournament bracket
-        pass
+        try:
+            data = request.get_json()
+            tournament = self.tournament_schema.load(data)
+            inserted_tournament = create_tournament(tournament)
+            response = jsonify(self.tournament_schema.dump(inserted_tournament))
+            response.status_code = 201
+            response.headers['Location'] = url_for('api.tournament_api')
+            return response
+        except ValidationError as err:
+            return bad_request(err.messages)
 
     def delete(self, tournament_id):
         pass
