@@ -21,8 +21,14 @@ def advance_byes(tournament_id):
     """
     Advances any byes in the tournament
     """
-    for match in Match.query.filter((Match.tournament_id==tournament_id) & (Match.round==1)):
-        if
+    for match in Match.query.filter((Match.tournament_id == tournament_id) & (Match.round == 1)):
+        if match.participant_a is None or match.participant_b is None:
+            participant = match.participant_a if match.participant_a else match.participant_b
+            next_match = Match.query.get(match.winner_match_id)
+            next_match.participant_a_id = participant.participant_id
+            match.match_status = StatusEnum.COMPLETED
+            db.session.flush()
+
 
 def _insert_tournament(tournament):
     """
@@ -67,7 +73,7 @@ def _insert_initial_matches(participants, order, tournament_id):
         match = Match(
             participant_a_id=None if participant_a is None else participant_a.participant_id,
             participant_b_id=None if participant_b is None else participant_b.participant_id,
-            status='not_started',
+            status=StatusEnum.NOT_STARTED,
             round=1,
             tournament_id=tournament_id
         )
@@ -88,7 +94,7 @@ def _insert_bracket(first_round, tournament_id):
         m2 = match_queue.popleft()
         match = Match(
             round=m1.round + 1,
-            status='not_started',
+            status=StatusEnum.NOT_STARTED,
             tournament_id=tournament_id
         )
         db.session.add(match)
@@ -103,7 +109,7 @@ def _get_bracket_size(participants_size):
     """
     Calculates the bracket size (next biggest power of 2)
     """
-    return 2**(participants_size-1).bit_length()
+    return 2 ** (participants_size - 1).bit_length()
 
 
 def _generate_seeded_order(size):

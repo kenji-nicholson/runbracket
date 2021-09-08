@@ -1,9 +1,16 @@
 from datetime import datetime
 
+from enum import Enum
 from sqlalchemy.orm import backref
 from app.api.api_functions import PaginatedAPIMixin
 from app import db
 from werkzeug.security import check_password_hash, generate_password_hash
+
+
+class StatusEnum(Enum):
+    NOT_STARTED = 'not_started'
+    IN_PROGRESS = 'in_progress'
+    COMPLETED = 'completed'
 
 
 class Tournament(db.Model):
@@ -18,7 +25,7 @@ class Tournament(db.Model):
     tournament_description = db.Column(db.String(TOURNAMENT_DESCRIPTION_LENGTH))
     is_seeded = db.Column(db.Boolean(), default=False)
     date = db.Column(db.DateTime(), default=datetime.utcnow)
-    status = db.Column(db.Enum('not_started', 'in_progress', 'complete'))
+    status = db.Column(db.Enum(StatusEnum))
 
 
 class Match(db.Model):
@@ -41,7 +48,7 @@ class Match(db.Model):
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.tournament_id'))
     tournament = db.relationship('Tournament', backref=backref('matches', lazy='dynamic'),
                                  foreign_keys=[tournament_id])
-    status = db.Column(db.Enum('not_started', 'in_progress', 'completed'))
+    status = db.Column(db.Enum(StatusEnum))
 
 
 class Participant(db.Model):

@@ -23,6 +23,7 @@ class MatchSchema(Schema):
 
     match_id = fields.Integer()
     match_number = fields.Integer()
+    match_status = fields.Str(validate=validate.OneOf(['not_started', 'in_progress', 'completed']))
     date = fields.DateTime()
     participant_a_score = fields.Integer()
     participant_b_score = fields.Integer()
@@ -37,6 +38,7 @@ class TournamentSchema(SQLAlchemySchema):
         load_instance = True
 
     tournament_id = fields.Integer()
+    tournament_status = fields.Str(validate=validate.OneOf(['not_started', 'in_progress', 'completed']))
     tournament_name = \
         fields.String(required=True, validate=validate.Length(max=Tournament.TOURNAMENT_NAME_LENGTH, min=1))
     tournament_description = \
