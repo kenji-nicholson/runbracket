@@ -87,7 +87,7 @@ export const LoginView: React.FC<Props> = () => {
             <Grid item xs={12}>
               <FormTextField
                 name="password"
-                label="password"
+                label="Password"
                 control={control}
                 autoComplete="current-password"
                 type="password"

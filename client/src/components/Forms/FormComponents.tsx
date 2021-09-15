@@ -4,16 +4,13 @@ import { FieldValues } from "react-hook-form";
 import { Controller, UseControllerProps } from "react-hook-form";
 
 interface FormTextFieldProps<T> extends UseControllerProps<T> {
-  label?: string;
-  autoComplete?: string;
-  type?: string;
-  autoFocus?: boolean;
+  [x: string]: any;
 }
 
 export const FormTextField = <T extends FieldValues>(
   props: PropsWithChildren<FormTextFieldProps<T>>
 ) => {
-  const { name, control, label, autoComplete, type, children } = props;
+  const { name, control, ...rest } = props;
   return (
     <Controller
       name={name}
@@ -23,13 +20,10 @@ export const FormTextField = <T extends FieldValues>(
           variant="outlined"
           fullWidth
           id={name}
-          label={label}
-          autoComplete={autoComplete}
           error={Boolean(error?.message)}
           helperText={error?.message}
-          type={type}
           {...field}
-          {...children}
+          {...rest}
         />
       )}
     />

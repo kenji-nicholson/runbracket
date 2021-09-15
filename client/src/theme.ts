@@ -11,4 +11,10 @@ const theme: Theme = createTheme({
   },
 });
 
+export const greyBackgroundColor = (theme: Theme) => {
+  return theme.palette.mode === "light"
+    ? theme.palette.grey[100]
+    : theme.palette.grey[900];
+};
+
 export default theme;
