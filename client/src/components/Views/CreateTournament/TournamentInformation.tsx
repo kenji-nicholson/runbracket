@@ -1,7 +1,6 @@
 import { Grid } from "@material-ui/core";
-import { Title } from "@material-ui/icons";
 import React from "react";
-import { Control, FieldValues } from "react-hook-form";
+import { Control } from "react-hook-form";
 import { Tournament } from "../../../app/services/tournament";
 import { FormTextField } from "../../Forms/FormComponents";
 import SectionHeader from "../../Forms/SectionHeader";
@@ -19,7 +18,7 @@ const TournamentInformation: React.FC<Props> = (props) => {
         <Grid item xs={12}>
           <FormTextField
             name="tournament_name"
-            label="Tournament Name"
+            label="Name"
             control={control}
           />
         </Grid>
@@ -27,7 +26,7 @@ const TournamentInformation: React.FC<Props> = (props) => {
           <FormTextField
             rows="3"
             name="tournament_description"
-            label="Tournament Description"
+            label="Description"
             control={control}
             multiline
           />
