@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
+import CssBaseline from "@mui/material/CssBaseline";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
 import {
   UserInfoAvatar,
   UserInfoContainer,
   UserInfoForm,
   UserInfoSubmit,
 } from "../Forms/userInfoStyles";
-import Container from "@material-ui/core/Container";
+import Container from "@mui/material/Container";
 import { useHistory } from "react-router";
 import { useAppDispatch } from "../../hooks/store";
 import { setCredentials } from "../../app/slices/authSlice";
@@ -27,12 +26,18 @@ import { FormTextField } from "../Forms/FormComponents";
 interface Props {}
 
 export const LoginView: React.FC<Props> = () => {
+  const defaultValues = {
+    email: "",
+    password: "",
+  };
+
   const validationSchema = object().shape({
     email: string().required("Email is required.").email("Not a valid email."),
     password: string().required("Password is required."),
   });
 
   const { handleSubmit, control } = useForm<LoginRequest>({
+    defaultValues: defaultValues,
     resolver: yupResolver(validationSchema),
   });
   const dispatch = useAppDispatch();

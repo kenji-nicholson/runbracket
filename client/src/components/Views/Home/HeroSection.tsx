@@ -1,5 +1,5 @@
-import { Button, Grid, Typography } from "@material-ui/core";
-import { styled } from "@material-ui/core/styles";
+import { Button, Grid, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import background from "./background.png";

@@ -4,7 +4,7 @@ import {
   Alert as MuiAlert,
   AlertColor,
   SnackbarCloseReason,
-} from "@material-ui/core";
+} from "@mui/material";
 
 interface Props {
   open: boolean;

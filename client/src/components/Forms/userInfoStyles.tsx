@@ -1,5 +1,5 @@
-import { styled } from "@material-ui/core/styles";
-import { Avatar, Button } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
+import { Avatar, Button } from "@mui/material";
 
 export const UserInfoContainer = styled("div")(({ theme }) => ({
   marginTop: theme.spacing(8),

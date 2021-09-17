@@ -1,14 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Box,
-  Container,
-  CssBaseline,
-  Grid,
-  List,
-  Paper,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Box, Container, CssBaseline, Grid, Paper } from "@mui/material";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
@@ -19,9 +10,9 @@ import {
   useTournamentMutation,
 } from "../../../app/services/tournament";
 import { greyBackgroundColor } from "../../../theme";
-import { FormTextField } from "../../Forms/FormComponents";
 import { UserInfoContainer, UserInfoForm } from "../../Forms/userInfoStyles";
 import TournamentInformation from "./TournamentInformation";
+import TournamentParticipants from "./TournamentParticipants";
 
 export const CreateTournamentView: React.FC = () => {
   const validationSchema = object().shape({
@@ -90,6 +81,17 @@ export const CreateTournamentView: React.FC = () => {
                   }}
                 >
                   <TournamentInformation control={control} />
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper
+                  sx={{
+                    p: 3,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <TournamentParticipants control={control} />
                 </Paper>
               </Grid>
             </Grid>

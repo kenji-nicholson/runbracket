@@ -8,8 +8,8 @@ import {
   Typography,
   Menu,
   MenuItem,
-} from "@material-ui/core";
-import { styled } from "@material-ui/core/styles";
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -43,7 +43,7 @@ const NavigationBar = () => {
     user.user != null ? (
       <Grid container alignItems="center">
         <Grid item>
-          <IconButton onClick={handleMenu}>
+          <IconButton onClick={handleMenu} size="large">
             <Avatar
               {...stringAvatar(user.user.display_name, AvatarSize.Small)}
             />

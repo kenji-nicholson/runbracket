@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 import React from "react";
 import { Control } from "react-hook-form";
 import { Tournament } from "../../../app/services/tournament";

@@ -1,29 +1,34 @@
 import React, { useState } from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
+import CssBaseline from "@mui/material/CssBaseline";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
 import Alert from "../Alert";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
 import {
   UserInfoAvatar,
   UserInfoContainer,
   UserInfoForm,
   UserInfoSubmit,
 } from "../Forms/userInfoStyles";
-import Container from "@material-ui/core/Container";
+import Container from "@mui/material/Container";
 import { useSignUpMutation } from "../../app/services/register";
 import { useHistory } from "react-router";
 import type { RegisterRequest } from "../../app/services/register";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { string, object, number, SchemaOf } from "yup";
-import { ErrorSharp } from "@material-ui/icons";
+import { string, object } from "yup";
 import { FormTextField } from "../Forms/FormComponents";
 
 export const RegisterView: React.FC = () => {
+  const defaultValues: RegisterRequest = {
+    first_name: "",
+    last_name: "",
+    display_name: "",
+    email: "",
+    password: "",
+  };
   const validationSchema = object().shape({
     first_name: string().required("First name is required."),
     last_name: string().required("Last name is required."),
@@ -38,6 +43,7 @@ export const RegisterView: React.FC = () => {
 
   const { handleSubmit, control } = useForm<RegisterRequest>({
     resolver: yupResolver(validationSchema),
+    defaultValues: defaultValues,
   });
 
   const [signUp] = useSignUpMutation();
