@@ -16,7 +16,7 @@ import { useAppDispatch } from "../../hooks/store";
 import { setCredentials } from "../../app/slices/authSlice";
 import { useLoginMutation } from "../../app/services/auth";
 import type { LoginRequest } from "../../app/services/auth";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import Alert from "../Alert";
 import { string, object } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -26,18 +26,12 @@ import { FormTextField } from "../Forms/FormComponents";
 interface Props {}
 
 export const LoginView: React.FC<Props> = () => {
-  const defaultValues = {
-    email: "",
-    password: "",
-  };
-
   const validationSchema = object().shape({
     email: string().required("Email is required.").email("Not a valid email."),
     password: string().required("Password is required."),
   });
 
   const { handleSubmit, control } = useForm<LoginRequest>({
-    defaultValues: defaultValues,
     resolver: yupResolver(validationSchema),
   });
   const dispatch = useAppDispatch();

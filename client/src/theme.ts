@@ -1,6 +1,6 @@
-import { createTheme, Theme, adaptV4Theme } from "@mui/material/styles";
+import { createTheme, Theme } from "@mui/material/styles";
 
-const theme: Theme = createTheme(adaptV4Theme({
+const theme: Theme = createTheme({
   palette: {
     primary: {
       main: "#3b2483",
@@ -9,7 +9,7 @@ const theme: Theme = createTheme(adaptV4Theme({
       main: "#f57c00",
     },
   },
-}));
+});
 
 export const greyBackgroundColor = (theme: Theme) => {
   return theme.palette.mode === "light"

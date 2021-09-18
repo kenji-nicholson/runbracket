@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Container, CssBaseline, Grid, Paper } from "@mui/material";
 import React, { useState } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { array, boolean, object, string } from "yup";

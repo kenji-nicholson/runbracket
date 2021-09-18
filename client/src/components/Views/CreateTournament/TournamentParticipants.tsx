@@ -23,41 +23,45 @@ interface Props {
 }
 
 const TournamentParticipants: React.FC<Props> = (props) => {
-  const validationSchema = object().shape({
-    participant_name: string().required("Name is required!"),
-  });
-
-  const parentControl = props.control;
+  const { control } = props;
   const { fields, append, remove } = useFieldArray({
-    control: parentControl,
+    control: control,
     name: "participants",
   });
-
-  const { handleSubmit, control } = useForm<Participant>({
-    resolver: yupResolver(validationSchema),
-  });
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    handleSubmit((data: Participant) => {
-      console.log(data);
-      append(data);
-    })(e);
+  const defaultParticipant = {
+    participant_id: null,
+    participant_name: "",
+    seed: null,
   };
+  const [participant, setParticipant] =
+    useState<Participant>(defaultParticipant);
+
+  const addParticipant = () => {
+    if (participant.participant_name) {
+      append(participant);
+      setParticipant(defaultParticipant);
+    }
+  };
+
   return (
     <>
       <SectionHeader>Participants</SectionHeader>
       <Grid container spacing={1} marginBottom={1}>
         <Grid item xs={10}>
-          <FormTextField
-            control={control}
+          <TextField
             fullWidth
-            name="participant_name"
             label="Name"
-          ></FormTextField>
+            onChange={(e) =>
+              setParticipant({
+                ...participant,
+                participant_name: e.target.value,
+              })
+            }
+            value={participant.participant_name}
+          ></TextField>
         </Grid>
         <Grid item alignSelf="center" xs={2}>
-          <Button onClick={onSubmit} fullWidth variant="contained">
+          <Button onClick={addParticipant} fullWidth variant="contained">
             ADD
           </Button>
         </Grid>
@@ -78,7 +82,7 @@ const TournamentParticipants: React.FC<Props> = (props) => {
                 return (
                   <ParticipantRow
                     key={item.id}
-                    {...{ item, control: parentControl, remove, index }}
+                    {...{ item, control: control, remove, index }}
                   />
                 );
               })}
@@ -88,7 +92,7 @@ const TournamentParticipants: React.FC<Props> = (props) => {
       )}
       <FormCheckbox
         name="is_seeded"
-        control={parentControl}
+        control={control}
         label="Include seeding"
       ></FormCheckbox>
     </>

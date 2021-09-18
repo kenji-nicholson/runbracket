@@ -7,6 +7,7 @@ import { store, persistor } from "./app/store";
 import { Provider } from "react-redux";
 import theme from "./theme";
 import { PersistGate } from "redux-persist/integration/react";
+import { HelmetProvider } from "react-helmet-async";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -14,9 +15,11 @@ ReactDOM.render(
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <Router>
-            <React.StrictMode>
-              <App />
-            </React.StrictMode>
+            <HelmetProvider>
+              <React.StrictMode>
+                <App />
+              </React.StrictMode>
+            </HelmetProvider>
           </Router>
         </ThemeProvider>
       </StyledEngineProvider>

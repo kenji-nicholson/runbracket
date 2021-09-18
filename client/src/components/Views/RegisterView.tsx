@@ -15,20 +15,13 @@ import Container from "@mui/material/Container";
 import { useSignUpMutation } from "../../app/services/register";
 import { useHistory } from "react-router";
 import type { RegisterRequest } from "../../app/services/register";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { string, object } from "yup";
 import { FormTextField } from "../Forms/FormComponents";
 
 export const RegisterView: React.FC = () => {
-  const defaultValues: RegisterRequest = {
-    first_name: "",
-    last_name: "",
-    display_name: "",
-    email: "",
-    password: "",
-  };
   const validationSchema = object().shape({
     first_name: string().required("First name is required."),
     last_name: string().required("Last name is required."),
@@ -43,7 +36,6 @@ export const RegisterView: React.FC = () => {
 
   const { handleSubmit, control } = useForm<RegisterRequest>({
     resolver: yupResolver(validationSchema),
-    defaultValues: defaultValues,
   });
 
   const [signUp] = useSignUpMutation();

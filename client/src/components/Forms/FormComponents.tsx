@@ -3,18 +3,17 @@ import { PropsWithChildren } from "react";
 import { FieldValues } from "react-hook-form";
 import { Controller, UseControllerProps } from "react-hook-form";
 
-interface FormTextFieldProps<T> extends UseControllerProps<T> {
+interface FormTextFieldProps {
+  name: string;
   [x: string]: any;
 }
 
-interface FormCheckboxProps<T> extends UseControllerProps<T> {
+interface FormCheckboxProps {
   [x: string]: any;
   label?: string;
 }
 
-export const FormTextField = <T extends FieldValues>(
-  props: PropsWithChildren<FormTextFieldProps<T>>
-) => {
+export const FormTextField: React.FC<FormTextFieldProps> = (props) => {
   const { name, control, ...rest } = props;
   return (
     <Controller
@@ -30,18 +29,18 @@ export const FormTextField = <T extends FieldValues>(
           {...rest}
         />
       )}
+      defaultValue=""
     />
   );
 };
 
-export const FormCheckbox = <T extends FieldValues>(
-  props: PropsWithChildren<FormCheckboxProps<T>>
-) => {
+export const FormCheckbox: React.FC<FormCheckboxProps> = (props) => {
   const { name, control, label, ...rest } = props;
   return (
     <Controller
       name={name}
       control={control}
+      defaultValue={true}
       render={({ field }) => (
         <FormControlLabel
           label={label}
