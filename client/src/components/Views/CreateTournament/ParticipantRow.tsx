@@ -10,16 +10,18 @@ interface Props {
   index: number;
   control: Control<Tournament, object>;
   remove: (index?: number | number[] | undefined) => void;
+  is_seeded: boolean;
 }
 
 const ParticipantRow: React.FC<Props> = (props) => {
-  const { item, control, remove, index } = props;
+  const { item, control, remove, index, is_seeded } = props;
   return (
     <>
       <TableRow>
-        <TableCell>{index + 1}</TableCell>
+        {is_seeded && <TableCell>{index + 1}</TableCell>}
         <TableCell>
           <FormTextField
+            required
             variant="standard"
             name={`participants.${index}.participant_name`}
             control={control}

@@ -20,6 +20,7 @@ const TournamentInformation: React.FC<Props> = (props) => {
             name="tournament_name"
             label="Name"
             control={control}
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -29,6 +30,7 @@ const TournamentInformation: React.FC<Props> = (props) => {
             label="Description"
             control={control}
             multiline
+            required
           />
         </Grid>
       </Grid>

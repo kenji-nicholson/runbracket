@@ -51,7 +51,7 @@ export const tournamentApi = createApi({
   endpoints: (builder) => ({
     tournament: builder.mutation<Tournament, Tournament>({
       query: (tournament) => ({
-        url: "tournament",
+        url: "tournaments/",
         method: "POST",
         body: tournament,
       }),

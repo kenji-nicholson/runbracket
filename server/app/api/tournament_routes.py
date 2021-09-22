@@ -10,21 +10,22 @@ from app.models import Tournament, Match, Participant
 from app.api.api_functions import register_api, PaginatedAPIMixin
 from app.api.schemas import TournamentSchema, MatchSchema, ParticipantSchema
 from app.api.errors import bad_request
+from app import db
 
 
 class TournamentAPI(MethodView, PaginatedAPIMixin):
     """
     Endpoints for managing/viewing overall tournament information.
     """
-    tournament_schema = TournamentSchema()
-    tournaments_schema = TournamentSchema(many=True)
+    tournament_schema = TournamentSchema(session=db.session)
+    tournaments_schema = TournamentSchema(many=True, session=db.session)
 
     def get(self, tournament_id):
         if tournament_id is None:
             page = request.args.get('page', 1, type=int)
             per_page = min(request.args.get('per_page', 10, type=int), 100)
             data = self.get_paginated_collection(Tournament.query, self.tournaments_schema, page, per_page,
-                                                 'api')
+                                                 'api.tournament_api')
             return jsonify(data)
         else:
             tournament = Tournament.query.get(tournament_id)
@@ -42,6 +43,7 @@ class TournamentAPI(MethodView, PaginatedAPIMixin):
             response.headers['Location'] = url_for('api.tournament_api')
             return response
         except ValidationError as err:
+            db.session.rollback()
             return bad_request(err.messages)
 
     def delete(self, tournament_id):

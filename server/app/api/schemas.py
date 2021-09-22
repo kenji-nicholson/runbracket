@@ -1,27 +1,31 @@
 from marshmallow import Schema, fields, validate, EXCLUDE
 from marshmallow_sqlalchemy import SQLAlchemySchema
 from app.models import *
+from app import db
 
 
-class ParticipantSchema(Schema):
+class ParticipantSchema(SQLAlchemySchema):
     class Meta:
         model = Participant
         unknown = EXCLUDE
         load_instance = True
+        sqla_session = db.session
 
-    participant_id = fields.Integer()
+    participant_id = fields.Integer(missing=None, allow_none=True)
     participant_name = \
         fields.String(required=True, validate=validate.Length(max=Participant.PARTICIPANT_NAME_LENGTH, min=1))
-    seed = fields.Integer()
+    seed = fields.Integer(missing=None, allow_none=True)
 
 
-class MatchSchema(Schema):
+class MatchSchema(SQLAlchemySchema):
     class Meta:
         model = Match
         unknown = EXCLUDE
         load_instance = True
+        sqla_session = db.session
 
     match_id = fields.Integer()
+    winner_match_id = fields.Integer()
     round = fields.Integer()
     match_status = fields.Str(validate=validate.OneOf(['not_started', 'in_progress', 'completed']))
     date = fields.DateTime()
@@ -36,6 +40,7 @@ class TournamentSchema(SQLAlchemySchema):
         model = Tournament
         unknown = EXCLUDE
         load_instance = True
+        sqla_session = db.session
 
     user_id = fields.Integer(required=True)
     tournament_id = fields.Integer()

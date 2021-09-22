@@ -10,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import React, { BaseSyntheticEvent, useState } from "react";
-import { Control, useFieldArray, useForm } from "react-hook-form";
+import { Control, useFieldArray, useForm, UseFormWatch } from "react-hook-form";
 import { Tournament, Participant } from "../../../app/services/tournament";
 import SectionHeader from "../../Forms/SectionHeader";
 import ParticipantRow from "./ParticipantRow";
@@ -20,14 +20,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 interface Props {
   control: Control<Tournament, object>;
+  watch: UseFormWatch<Tournament>;
 }
 
 const TournamentParticipants: React.FC<Props> = (props) => {
-  const { control } = props;
+  const { control, watch } = props;
+
   const { fields, append, remove } = useFieldArray({
     control: control,
     name: "participants",
   });
+
+  const is_seeded = watch("is_seeded", true);
   const defaultParticipant = {
     participant_id: null,
     participant_name: "",
@@ -72,7 +76,7 @@ const TournamentParticipants: React.FC<Props> = (props) => {
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
-                <TableCell width="10%">Seed</TableCell>
+                {is_seeded && <TableCell width="10%">Seed</TableCell>}
                 <TableCell width="80%">Name</TableCell>
                 <TableCell width="10%"></TableCell>
               </TableRow>
@@ -82,7 +86,7 @@ const TournamentParticipants: React.FC<Props> = (props) => {
                 return (
                   <ParticipantRow
                     key={item.id}
-                    {...{ item, control: control, remove, index }}
+                    {...{ item, control: control, remove, index, is_seeded }}
                   />
                 );
               })}

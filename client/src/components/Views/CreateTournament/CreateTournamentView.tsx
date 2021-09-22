@@ -1,18 +1,29 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Container, CssBaseline, Grid, Paper } from "@mui/material";
+import Alert from "../../Alert";
+import {
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  Grid,
+  Paper,
+} from "@mui/material";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { array, boolean, object, string } from "yup";
 import {
   Tournament,
   useTournamentMutation,
 } from "../../../app/services/tournament";
+import { RootState } from "../../../app/store";
 import { greyBackgroundColor } from "../../../theme";
 import { UserInfoContainer, UserInfoForm } from "../../Forms/userInfoStyles";
 import TournamentInformation from "./TournamentInformation";
 import TournamentParticipants from "./TournamentParticipants";
+import cloneDeep from "lodash/cloneDeep";
 
 export const CreateTournamentView: React.FC = () => {
   const validationSchema = object().shape({
@@ -22,15 +33,17 @@ export const CreateTournamentView: React.FC = () => {
     participants: array()
       .of(
         object().shape({
-          participant_name: string().required(),
+          participant_name: string().required("Participant name is required."),
         })
       )
       .required(),
   });
 
+  const user = useSelector((state: RootState) => state.auth);
+
   const { push } = useHistory();
 
-  const { handleSubmit, control } = useForm<Tournament>({
+  const { handleSubmit, control, watch } = useForm<Tournament>({
     resolver: yupResolver(validationSchema),
   });
 
@@ -47,7 +60,11 @@ export const CreateTournamentView: React.FC = () => {
 
   const onSubmit = async (data: Tournament) => {
     try {
-      const response = await createTournament(data).unwrap();
+      const tournament = {
+        ...cloneDeep(data),
+        user_id: user.user ? user.user.user_id : null,
+      };
+      const response = await createTournament(tournament).unwrap();
       console.log(response);
       push("/");
     } catch (err) {
@@ -91,10 +108,21 @@ export const CreateTournamentView: React.FC = () => {
                     flexDirection: "column",
                   }}
                 >
-                  <TournamentParticipants control={control} />
+                  <TournamentParticipants control={control} watch={watch} />
                 </Paper>
               </Grid>
+              <Grid item marginLeft="auto" xs={3} marginTop={1}>
+                <Button type="submit" variant="contained" fullWidth>
+                  CREATE TOURNAMENT
+                </Button>
+              </Grid>
             </Grid>
+            <Alert
+              open={open}
+              handleClose={handleClose}
+              severity="error"
+              message="Oops! There was a problem."
+            />
           </UserInfoForm>
         </UserInfoContainer>
       </Container>
