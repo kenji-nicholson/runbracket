@@ -11,6 +11,7 @@ class ParticipantSchema(SQLAlchemySchema):
         load_instance = True
         sqla_session = db.session
 
+    tournament_id = fields.Integer()
     participant_id = fields.Integer(missing=None, allow_none=True)
     participant_name = \
         fields.String(required=True, validate=validate.Length(max=Participant.PARTICIPANT_NAME_LENGTH, min=1))
@@ -24,6 +25,7 @@ class MatchSchema(SQLAlchemySchema):
         load_instance = True
         sqla_session = db.session
 
+    tournament_id = fields.Integer()
     match_id = fields.Integer()
     winner_match_id = fields.Integer()
     round = fields.Integer()
@@ -53,6 +55,24 @@ class TournamentSchema(SQLAlchemySchema):
     date = fields.DateTime()
     matches = fields.List(fields.Nested(MatchSchema))
     participants = fields.List(fields.Nested(ParticipantSchema), required=True)
+
+
+class TournamentListSchema(SQLAlchemySchema):
+    class Meta:
+        model = Tournament
+        unknown = EXCLUDE
+        load_instance = True
+        sqla_session = db.session
+
+    user_id = fields.Integer()
+    tournament_id = fields.Integer()
+    tournament_status = fields.Str(validate=validate.OneOf(['not_started', 'in_progress', 'completed']))
+    tournament_name = \
+        fields.String()
+    tournament_description = \
+        fields.String()
+    is_seeded = fields.Boolean()
+    date = fields.DateTime()
 
 
 class UserSchema(SQLAlchemySchema):

@@ -7,6 +7,7 @@ import {
   CssBaseline,
   Grid,
   Paper,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -72,6 +73,7 @@ export const CreateTournamentView: React.FC = () => {
       setOpen(true);
     }
   };
+
   return (
     <Box
       sx={{
@@ -89,6 +91,16 @@ export const CreateTournamentView: React.FC = () => {
         <UserInfoContainer>
           <UserInfoForm onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography
+                  marginY={3}
+                  variant="h2"
+                  component="h1"
+                  color="primary"
+                >
+                  New Tournament
+                </Typography>
+              </Grid>
               <Grid item xs={12}>
                 <Paper
                   sx={{
