@@ -63,15 +63,10 @@ def _create_matches(participants, is_seeded, tournament_id):
     Creates the matches for the tournament, including byes.
     """
     bracket_size = _get_bracket_size(len(participants))
-    print("test1", file=sys.stderr)
     padded_participants = participants + [''] * (bracket_size - len(participants))
-    print("test2", file=sys.stderr)
     order = _generate_seeded_order(bracket_size) if is_seeded else _generate_random_order(bracket_size)
-    print(order, file=sys.stderr)
     first_round = _insert_initial_matches(padded_participants, order, tournament_id)
-    print("test4", file=sys.stderr)
     _insert_bracket(first_round, tournament_id)
-    print("test5", file=sys.stderr)
     return Match.query.filter(Match.tournament_id == tournament_id)
 
 
@@ -81,9 +76,7 @@ def _insert_initial_matches(participants, order, tournament_id):
     """
     matches = []
     i = 0
-    print(participants, file=sys.stderr)
     while i < len(participants) - 1:
-        print(i, file=sys.stderr)
         participant_a = participants[order[i] - 1]
         participant_b = participants[order[i + 1] - 1]
         match = Match(
@@ -132,9 +125,7 @@ def _generate_seeded_order(size):
     """
     Generates the seeded order for a given size.
     """
-    print(size, file=sys.stderr)
     rounds = int(math.log(size)/math.log(2))
-    print(rounds, file=sys.stderr)
     placements = [1, 2]
     for i in range(1, rounds):
         placements = _next_layer(placements)
