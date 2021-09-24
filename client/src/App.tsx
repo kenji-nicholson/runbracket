@@ -6,6 +6,7 @@ import { Switch, Route } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import CreateTournamentView from "./components/Views/CreateTournament/CreateTournamentView";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { UserProfileView } from "./components/Views/UserProfile/UserProfileView";
 
 const App: React.FC = () => {
   return (
@@ -19,8 +20,9 @@ const App: React.FC = () => {
         <ProtectedRoute
           exact
           component={CreateTournamentView}
-          path="/tournament/new"
+          path="/tournaments/new"
         />
+        <ProtectedRoute exact component={UserProfileView} path="/users/:id" />
       </Switch>
     </>
   );
