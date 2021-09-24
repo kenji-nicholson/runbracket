@@ -49,7 +49,7 @@ export const HeroSection: React.FC<Props> = () => {
           variant="contained"
           color="secondary"
           onClick={() => {
-            push("/tournament/new");
+            push("/tournaments/new");
           }}
         >
           Create Tournament

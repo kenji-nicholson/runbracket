@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { authApi } from "./services/auth";
 import authReducer from "./slices/authSlice";
-import { registerApi } from "./services/register";
+import { userApi } from "./services/user";
 import {
   persistStore,
   persistReducer,
@@ -16,7 +16,7 @@ import storage from "redux-persist/lib/storage";
 import { tournamentApi } from "./services/tournament";
 
 const rootReducer = combineReducers({
-  [registerApi.reducerPath]: registerApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [tournamentApi.reducerPath]: tournamentApi.reducer,
   auth: authReducer,
@@ -26,7 +26,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  blacklist: [registerApi.reducerPath, authApi.reducerPath],
+  blacklist: [userApi.reducerPath, authApi.reducerPath],
   whitelist: ["auth"],
 };
 
@@ -39,11 +39,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(
-      registerApi.middleware,
-      authApi.middleware,
-      tournamentApi.middleware
-    ),
+    }).concat(userApi.middleware, authApi.middleware, tournamentApi.middleware),
 });
 
 export const persistor = persistStore(store);

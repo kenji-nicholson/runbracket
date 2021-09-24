@@ -12,9 +12,9 @@ import {
   UserInfoSubmit,
 } from "../Forms/userInfoStyles";
 import Container from "@mui/material/Container";
-import { useSignUpMutation } from "../../app/services/register";
+import { useAddUserMutation } from "../../app/services/user";
 import { useHistory } from "react-router";
-import type { RegisterRequest } from "../../app/services/register";
+import type { RegisterRequest } from "../../app/services/user";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -38,7 +38,7 @@ export const RegisterView: React.FC = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const [signUp] = useSignUpMutation();
+  const [signUp] = useAddUserMutation();
 
   const [open, setOpen] = useState<boolean>(false);
 

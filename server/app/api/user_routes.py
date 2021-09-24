@@ -13,7 +13,7 @@ from app.api.errors import bad_request, unauthorized
 from app.api.schemas import UserSchema, LoginSchema
 from app.models import User
 from app.api import bp
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, set_access_cookies
 
 
 class UserAPI(MethodView, PaginatedAPIMixin):
@@ -61,21 +61,6 @@ class UserAPI(MethodView, PaginatedAPIMixin):
     def put(self, user_id):
         pass
 
-
-@bp.route('/login', methods=['POST'])
-def login():
-    login_schema = LoginSchema()
-    user_schema = UserSchema(session=db.session)
-    try:
-        data = request.get_json()
-        credentials = login_schema.load(data)
-        user = User.query.filter_by(email=credentials['email']).first()
-        if user and user.check_password(credentials['password']):
-            access_token = create_access_token(identity=user.display_name)
-            return jsonify(user=user_schema.dump(user), token=access_token)
-        return unauthorized('Username or password is incorrect')
-    except ValidationError as err:
-        return bad_request(err.messages)
 
 
 register_api(UserAPI, 'user_api', '/users/', pk='user_id')

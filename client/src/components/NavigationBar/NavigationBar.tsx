@@ -57,7 +57,16 @@ const NavigationBar = () => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>My Profile</MenuItem>
+            <MenuItem
+              onClick={() => {
+                push({
+                  pathname: `/users/${user.user?.display_name}`,
+                  state: { detail: user.user },
+                });
+              }}
+            >
+              My Profile
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 dispatch(logOut());

@@ -63,11 +63,22 @@ def _create_matches(participants, is_seeded, tournament_id):
     Creates the matches for the tournament, including byes.
     """
     bracket_size = _get_bracket_size(len(participants))
-    padded_participants = participants + [''] * (bracket_size - len(participants))
-    order = _generate_seeded_order(bracket_size) if is_seeded else _generate_random_order(bracket_size)
+
+    ordered_participants = participants if is_seeded else _shuffle_participants(participants)
+    padded_participants = ordered_participants + [''] * (bracket_size - len(ordered_participants))
+    order = _generate_seeded_order(bracket_size)
     first_round = _insert_initial_matches(padded_participants, order, tournament_id)
     _insert_bracket(first_round, tournament_id)
     return Match.query.filter(Match.tournament_id == tournament_id)
+
+
+def _shuffle_participants(participants):
+    """
+    Shuffles the participants to get a random seeding if is_seeded is false
+    """
+    out = participants.copy()
+    random.shuffle(out)
+    return out
 
 
 def _insert_initial_matches(participants, order, tournament_id):
@@ -77,8 +88,15 @@ def _insert_initial_matches(participants, order, tournament_id):
     matches = []
     i = 0
     while i < len(participants) - 1:
-        participant_a = participants[order[i] - 1]
-        participant_b = participants[order[i + 1] - 1]
+
+        first_seed = order[i]
+        second_seed = order[i + 1]
+        participant_a = participants[first_seed - 1]
+        if participant_a:
+            participant_a.seed = first_seed
+        participant_b = participants[second_seed - 1]
+        if participant_b:
+            participant_b.seed = second_seed
         match = Match(
             participant_a_id=None if not participant_a else participant_a.participant_id,
             participant_b_id=None if not participant_b else participant_b.participant_id,
@@ -86,6 +104,7 @@ def _insert_initial_matches(participants, order, tournament_id):
             round=1,
             tournament_id=tournament_id
         )
+        db.session.flush()
         matches.append(match)
         i += 2
     db.session.add_all(matches)
@@ -143,10 +162,3 @@ def _next_layer(placements):
         out.append(length - p)
     return out
 
-
-def _generate_random_order(size):
-    """
-    Generates a random order for the given size.
-    """
-    order = list(range(0, size))
-    return random.shuffle(order)
