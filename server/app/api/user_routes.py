@@ -2,6 +2,8 @@
 Endpoints for tournament related API calls.
 """
 import sys
+from datetime import date
+
 from flask import request, jsonify, url_for
 from flask.views import MethodView
 from marshmallow import ValidationError
@@ -35,7 +37,7 @@ class UserAPI(MethodView, PaginatedAPIMixin):
             user = User.query.get(user_id)
             if not user:
                 return bad_request('User does not exist!')
-            return jsonify(self.user_schema.dump(user), file=sys.stderr)
+            return jsonify(self.user_schema.dump(user))
 
     def post(self):
         try:
@@ -46,6 +48,7 @@ class UserAPI(MethodView, PaginatedAPIMixin):
             if 'password' not in data:
                 return bad_request('Password is required')
             user.set_password(data['password'])
+            user.register_date = date.today()
             db.session.add(user)
             db.session.commit()
             response = jsonify(self.user_schema.dump(user))

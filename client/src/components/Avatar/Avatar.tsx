@@ -1,5 +1,6 @@
 export enum AvatarSize {
   Small = 30,
+  Large = 60,
 }
 
 function stringToColor(string: string) {

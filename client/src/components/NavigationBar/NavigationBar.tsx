@@ -60,9 +60,10 @@ const NavigationBar = () => {
             <MenuItem
               onClick={() => {
                 push({
-                  pathname: `/users/${user.user?.display_name}`,
+                  pathname: `/users/${user.user?.user_id}`,
                   state: { detail: user.user },
                 });
+                handleClose();
               }}
             >
               My Profile

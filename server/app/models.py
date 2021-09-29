@@ -80,6 +80,7 @@ class User(db.Model, PaginatedAPIMixin):
     email = db.Column(db.String(EMAIL_LENGTH))
     display_name = db.Column(db.String(NAME_LENGTH))
     password_hash = db.Column(db.String(128))
+    register_date = db.Column(db.DateTime)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
