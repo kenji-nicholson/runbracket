@@ -1,10 +1,19 @@
-import { Grid } from "@mui/material";
-import React from "react";
-import { User } from "../../../app/services/auth";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Button, Divider, Grid } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { object, string } from "yup";
+import { CurrentUser, User } from "../../../app/services/auth";
+import { useUpdateUserMutation } from "../../../app/services/user";
+import { setUser } from "../../../app/slices/authSlice";
+import { useAppDispatch } from "../../../hooks/store";
+import Alert, { AlertParams } from "../../Alert";
 import SectionHeader from "../../Forms/SectionHeader";
+import EditUserAccountInformation from "./EditUserAccountInformation";
+import EditUserAccountSettings from "./EditUserAccountSettings";
 
 interface Props {
-  user: User;
+  user: CurrentUser;
 }
 
 const UserSettings: React.FC<Props> = (props) => {
@@ -16,18 +25,21 @@ const UserSettings: React.FC<Props> = (props) => {
     email: string()
       .required("Email address is required.")
       .email("Not a valid email."),
-    password: string().required("Password is required."),
   });
 
-  const { push } = useHistory();
-
-  const { handleSubmit, control } = useForm<RegisterRequest>({
+  const { handleSubmit, control } = useForm<CurrentUser>({
     resolver: yupResolver(validationSchema),
+    defaultValues: user,
   });
 
-  const [signUp] = useAddUserMutation();
+  const [updateUser] = useUpdateUserMutation();
 
   const [open, setOpen] = useState<boolean>(false);
+
+  const [alert, setAlert] = useState<AlertParams>({
+    severity: "error",
+    message: "Oops! There was a problem.",
+  });
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
@@ -36,22 +48,41 @@ const UserSettings: React.FC<Props> = (props) => {
     setOpen(false);
   };
 
-  const onSubmit = async (data: RegisterRequest) => {
+  const dispatch = useAppDispatch();
+
+  const onSubmit = async (data: CurrentUser) => {
     try {
-      const response = await signUp(data).unwrap();
-      console.log(response);
-      push("/");
+      const response = await updateUser(data).unwrap();
+      dispatch(setUser({ user: response }));
     } catch (err) {
       console.log(err);
       setOpen(true);
     }
   };
   return (
-    <Grid container>
-      <Grid item>
-        <SectionHeader>Account Information</SectionHeader>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <SectionHeader>Account Information</SectionHeader>
+          <EditUserAccountInformation user={user} control={control} />
+        </Grid>
+        <Grid item xs={12}>
+          <Divider />
+        </Grid>
+        <Grid item xs={12}>
+          <SectionHeader>Settings</SectionHeader>
+          <EditUserAccountSettings control={control} />
+        </Grid>
+        <Grid item>
+          <Divider />
+        </Grid>
+        <Grid item marginLeft="auto" xs={2} marginTop={1}>
+          <Button type="submit" variant="contained" fullWidth>
+            SAVE CHANGES
+          </Button>
+        </Grid>
       </Grid>
-    </Grid>
+    </form>
   );
 };
 

@@ -3,14 +3,22 @@ import { RootState } from "../store";
 
 export interface User {
   display_name: string;
-  email: string;
   first_name: string;
   last_name: string;
   user_id: number;
 }
 
+export interface CurrentUser {
+  display_name: string;
+  first_name: string;
+  last_name: string;
+  user_id: number;
+  dark_mode: boolean;
+  email: string;
+}
+
 export interface UserResponse {
-  user: User;
+  user: CurrentUser;
   token: string;
 }
 

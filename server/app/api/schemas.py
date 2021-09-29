@@ -84,8 +84,21 @@ class UserSchema(SQLAlchemySchema):
     user_id = fields.Integer()
     first_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
     last_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
-    email = fields.Email(required=True, validate=validate.Length(max=User.EMAIL_LENGTH))
     display_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
+
+
+class CurrentUserSchema(SQLAlchemySchema):
+    class Meta:
+        model = User
+        unknown = EXCLUDE
+        load_instance = True
+
+    user_id = fields.Integer()
+    email = fields.Email(required=True, validate=validate.Length(max=User.EMAIL_LENGTH))
+    first_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
+    last_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
+    display_name = fields.String(required=True, validate=validate.Length(max=User.NAME_LENGTH))
+    dark_mode = fields.Boolean()
 
 
 class LoginSchema(Schema):

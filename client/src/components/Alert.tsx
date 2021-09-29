@@ -35,3 +35,8 @@ const Alert: React.FC<Props> = ({ open, handleClose, severity, message }) => {
 };
 
 export default Alert;
+
+export interface AlertParams {
+  severity: AlertColor;
+  message: string;
+}

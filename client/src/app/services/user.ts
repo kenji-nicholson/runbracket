@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
-import { LoginRequest, User, UserResponse } from "./auth";
+import { CurrentUser, LoginRequest, User, UserResponse } from "./auth";
 
 export type Users = User[];
 
@@ -18,8 +18,18 @@ export interface RegisterRequest {
 }
 
 export const userApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
-  tagTypes: ["User"],
+  reducerPath: "userApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.REACT_APP_API_URL,
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.token;
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  tagTypes: ["User", "CurrentUser"],
   endpoints: (build) => ({
     getUsers: build.query<Users, void>({
       query: () => "users",
@@ -45,7 +55,10 @@ export const userApi = createApi({
       query: (id) => `users/${id}`,
       providesTags: (result, error, user_id) => [{ type: "User", user_id }],
     }),
-    updateUser: build.mutation<void, Pick<User, "user_id"> & Partial<User>>({
+    updateUser: build.mutation<
+      CurrentUser,
+      Pick<CurrentUser, "user_id"> & Partial<CurrentUser>
+    >({
       query: ({ user_id, ...patch }) => ({
         url: `users/${user_id}`,
         method: "PUT",

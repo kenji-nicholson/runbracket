@@ -6,19 +6,19 @@ from flask import request, jsonify
 from marshmallow import ValidationError
 from app.api.errors import unauthorized, bad_request
 from app.models import User
-from app.api.schemas import LoginSchema, UserSchema
+from app.api.schemas import LoginSchema, CurrentUserSchema
 
 
 @bp.route('/login', methods=['POST'])
 def login():
     login_schema = LoginSchema()
-    user_schema = UserSchema(session=db.session)
+    user_schema = CurrentUserSchema(session=db.session)
     try:
         data = request.get_json()
         credentials = login_schema.load(data)
         user = User.query.filter_by(email=credentials['email']).first()
         if user and user.check_password(credentials['password']):
-            access_token = create_access_token(identity=user.display_name)
+            access_token = create_access_token(identity=user.user_id)
             response = jsonify(user=user_schema.dump(user), token=access_token)
             return response
         return unauthorized('Username or password is incorrect')

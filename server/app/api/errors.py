@@ -17,3 +17,7 @@ def bad_request(message):
 
 def unauthorized(message):
     return error_response(401, message)
+
+
+def forbidden(message):
+    return error_response(403, message)

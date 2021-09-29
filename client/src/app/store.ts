@@ -26,7 +26,11 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  blacklist: [userApi.reducerPath, authApi.reducerPath],
+  blacklist: [
+    userApi.reducerPath,
+    authApi.reducerPath,
+    tournamentApi.reducerPath,
+  ],
   whitelist: ["auth"],
 };
 

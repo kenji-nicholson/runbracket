@@ -11,17 +11,18 @@ from marshmallow import ValidationError
 from sqlalchemy import or_
 from app import db
 from app.api.api_functions import register_api, PaginatedAPIMixin
-from app.api.errors import bad_request, unauthorized
-from app.api.schemas import UserSchema, LoginSchema
+from app.api.errors import bad_request, unauthorized, forbidden
+from app.api.schemas import UserSchema, CurrentUserSchema
 from app.models import User
 from app.api import bp
-from flask_jwt_extended import create_access_token, set_access_cookies
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 
 class UserAPI(MethodView, PaginatedAPIMixin):
     """
     Endpoints for managing users 
     """
+    current_user_schema = CurrentUserSchema(session=db.session)
 
     user_schema = UserSchema(session=db.session)
     users_schema = UserSchema(many=True, session=db.session)
@@ -61,9 +62,25 @@ class UserAPI(MethodView, PaginatedAPIMixin):
     def delete(self, user_id):
         pass
 
+    @jwt_required()
     def put(self, user_id):
-        pass
-
+        try:
+            current_user = get_jwt_identity()
+            if user_id != current_user:
+                return forbidden("Wrong user.")
+            user = User.query.get(user_id)
+            data = request.get_json()
+            if 'display_name' in data and data['display_name'] != user.display_name and \
+                    User.query.filter_by(display_name=data['display_name']).first():
+                return bad_request('Please use a different username')
+            if 'email' in data and data['email'] != user.email and \
+                    User.query.filter_by(email=data['email']).first():
+                return bad_request('Please use a different email address')
+            user = self.current_user_schema.load(data, instance=user)
+            db.session.commit()
+            return jsonify(self.current_user_schema.dump(user))
+        except ValidationError as err:
+            return bad_request(err.messages)
 
 
 register_api(UserAPI, 'user_api', '/users/', pk='user_id')

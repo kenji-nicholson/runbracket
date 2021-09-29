@@ -81,6 +81,7 @@ class User(db.Model, PaginatedAPIMixin):
     display_name = db.Column(db.String(NAME_LENGTH))
     password_hash = db.Column(db.String(128))
     register_date = db.Column(db.DateTime)
+    dark_mode = db.Column(db.Boolean, default=False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
