@@ -7,7 +7,11 @@ import { CurrentUser, User } from "../../../app/services/auth";
 import { useUpdateUserMutation } from "../../../app/services/user";
 import { setUser } from "../../../app/slices/authSlice";
 import { useAppDispatch } from "../../../hooks/store";
-import Alert, { AlertParams } from "../../Alert";
+import Alert, {
+  AlertParams,
+  DefaultErrorAlert,
+  DefaultSuccessAlert,
+} from "../../Alert";
 import SectionHeader from "../../Forms/SectionHeader";
 import EditUserAccountInformation from "./EditUserAccountInformation";
 import EditUserAccountSettings from "./EditUserAccountSettings";
@@ -36,10 +40,7 @@ const UserSettings: React.FC<Props> = (props) => {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const [alert, setAlert] = useState<AlertParams>({
-    severity: "error",
-    message: "Oops! There was a problem.",
-  });
+  const [alert, setAlert] = useState<AlertParams>(DefaultErrorAlert);
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
@@ -54,8 +55,11 @@ const UserSettings: React.FC<Props> = (props) => {
     try {
       const response = await updateUser(data).unwrap();
       dispatch(setUser({ user: response }));
+      setAlert(DefaultSuccessAlert);
+      setOpen(true);
     } catch (err) {
       console.log(err);
+      setAlert(DefaultErrorAlert);
       setOpen(true);
     }
   };
@@ -82,6 +86,12 @@ const UserSettings: React.FC<Props> = (props) => {
           </Button>
         </Grid>
       </Grid>
+      <Alert
+        message={alert.message}
+        open={open}
+        severity={alert.severity}
+        handleClose={handleClose}
+      ></Alert>
     </form>
   );
 };

@@ -6,18 +6,17 @@ interface SectionHeaderProps {
   children?: React.ReactNode;
 }
 
-const SectionHeaderTypography = styled(Typography)(({ theme }) => ({
-  color:
-    theme.palette.mode === "dark"
-      ? theme.palette.secondary.main
-      : theme.palette.primary.main,
-}));
-
 export const SectionHeader: React.FC<SectionHeaderProps> = (props) => {
   return (
-    <SectionHeaderTypography variant="h6" gutterBottom paddingBottom={2}>
+    <Typography
+      variant="h6"
+      component="h2"
+      color="primary"
+      gutterBottom
+      paddingBottom={2}
+    >
       {props.children}
-    </SectionHeaderTypography>
+    </Typography>
   );
 };
 

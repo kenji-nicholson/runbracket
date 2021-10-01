@@ -40,3 +40,13 @@ export interface AlertParams {
   severity: AlertColor;
   message: string;
 }
+
+export const DefaultErrorAlert: AlertParams = {
+  severity: "error",
+  message: "Oops! There was a problem.",
+};
+
+export const DefaultSuccessAlert: AlertParams = {
+  severity: "success",
+  message: "Changes saved!",
+};

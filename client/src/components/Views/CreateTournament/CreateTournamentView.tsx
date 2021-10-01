@@ -20,7 +20,7 @@ import {
   useTournamentMutation,
 } from "../../../app/services/tournament";
 import { RootState } from "../../../app/store";
-import { greyBackgroundColor } from "../../../theme";
+import { greyBackgroundColor } from "../../Theme/theme";
 import { UserInfoContainer, UserInfoForm } from "../../Forms/userInfoStyles";
 import TournamentInformation from "./TournamentInformation";
 import TournamentParticipants from "./TournamentParticipants";

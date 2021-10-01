@@ -8,6 +8,19 @@ const theme: Theme = createTheme({
     secondary: {
       main: "#f57c00",
     },
+    mode: "light",
+  },
+});
+
+export const darkTheme: Theme = createTheme({
+  palette: {
+    primary: {
+      main: "#f57c00",
+    },
+    secondary: {
+      main: "#3b2483",
+    },
+    mode: "dark",
   },
 });
 

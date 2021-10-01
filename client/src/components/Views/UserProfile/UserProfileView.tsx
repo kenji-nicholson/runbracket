@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { useGetUserQuery } from "../../../app/services/user";
 import { RootState } from "../../../app/store";
-import { greyBackgroundColor } from "../../../theme";
+import { greyBackgroundColor } from "../../Theme/theme";
 import { UserInfoContainer, UserInfoForm } from "../../Forms/userInfoStyles";
 import UserProfileInformation from "./UserProfileInformation";
 import UserSettings from "./UserSettings";
@@ -64,15 +64,17 @@ export const UserProfileView: React.FC = () => {
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <Paper
-                sx={{
-                  p: 3,
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                {user.user && <UserSettings user={user.user} />}
-              </Paper>
+              {user.user && user.user.user_id == parseInt(id) && (
+                <Paper
+                  sx={{
+                    p: 3,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <UserSettings user={user.user} />
+                </Paper>
+              )}
             </Grid>
           </Grid>
         </UserInfoContainer>
