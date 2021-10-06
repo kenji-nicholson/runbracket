@@ -1,6 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
-import { CurrentUser, LoginRequest, User, UserResponse } from "./auth";
+import {
+  baseQueryWithReauth,
+  CurrentUser,
+  LoginRequest,
+  User,
+  UserResponse,
+} from "./auth";
 
 export type Users = User[];
 
@@ -19,16 +25,7 @@ export interface RegisterRequest {
 
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_API_URL,
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ["User", "CurrentUser"],
   endpoints: (build) => ({
     getUsers: build.query<Users, void>({

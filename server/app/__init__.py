@@ -3,6 +3,7 @@ Start up class for PP3 flask application.
 This is where the app gets initialized.
 """
 import logging
+from datetime import timedelta
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 
@@ -32,10 +33,13 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=1)
+    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=15)
     db.init_app(app)
     migrate.init_app(app, db)
     mail.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
+    app.config['CORS_HEADERS'] = 'Content-Type'
     jwt.init_app(app)
 
     from app.main import bp as main_bp
