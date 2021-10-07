@@ -28,10 +28,11 @@ const NavigationBar = () => {
   const { push } = useHistory();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
   const user = useSelector((state: RootState) => state.auth);
   const dispatch = useAppDispatch();
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -43,7 +44,14 @@ const NavigationBar = () => {
     user.user != null ? (
       <Grid container alignItems="center">
         <Grid item>
-          <IconButton onClick={handleMenu} size="large">
+          <IconButton
+            id="user-button"
+            aria-controls="menu-navbar"
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleMenu}
+            size="large"
+          >
             <Avatar
               {...stringAvatar(user.user.display_name, AvatarSize.Small)}
             />
@@ -51,11 +59,11 @@ const NavigationBar = () => {
           <Menu
             id="menu-navbar"
             anchorEl={anchorEl}
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            keepMounted
-            transformOrigin={{ vertical: "top", horizontal: "right" }}
-            open={Boolean(anchorEl)}
+            open={open}
             onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "user-button",
+            }}
           >
             <MenuItem
               onClick={() => {

@@ -1,13 +1,15 @@
 """
 Endpoints for tournament related API calls.
 """
+import sys
+
 from flask import request, jsonify, url_for
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required
 from marshmallow import ValidationError
 
 from app.api.services import create_tournament
-from app.models import Tournament, Match, Participant
+from app.models import Tournament, Match, Participant, User
 from app.api.api_functions import register_api, PaginatedAPIMixin
 from app.api.schemas import TournamentSchema, MatchSchema, ParticipantSchema, TournamentListSchema
 from app.api.errors import bad_request
@@ -24,9 +26,11 @@ class TournamentAPI(MethodView, PaginatedAPIMixin):
 
     def get(self, tournament_id):
         if tournament_id is None:
+            user = request.args.get('user_id')
+            query = Tournament.query if user is None else Tournament.query.filter_by(user_id=user)
             page = request.args.get('page', 1, type=int)
             per_page = min(request.args.get('per_page', 10, type=int), 100)
-            data = self.get_paginated_collection(Tournament.query, self.tournament_list_schema, page, per_page,
+            data = self.get_paginated_collection(query, self.tournament_list_schema, page, per_page,
                                                  'api.tournament_api')
             return jsonify(data)
         else:

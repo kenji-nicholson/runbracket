@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
+import { baseQueryWithReauth } from "./auth";
+import PaginatedData from "./pagination";
 
 export enum Status {
   NOT_STARTED = "not_started",
@@ -24,6 +26,8 @@ export interface Match {
   participant_b: Participant;
 }
 
+export type Tournaments = Tournament[];
+
 export interface Tournament {
   user_id: null | number;
   tournament_id: null | number;
@@ -38,16 +42,7 @@ export interface Tournament {
 
 export const tournamentApi = createApi({
   reducerPath: "tournamentApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_API_URL,
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     tournament: builder.mutation<Tournament, Tournament>({
       query: (tournament) => ({
@@ -56,7 +51,20 @@ export const tournamentApi = createApi({
         body: tournament,
       }),
     }),
+    getTournamentsByUserId: builder.query<
+      PaginatedData<Tournament>,
+      { user_id: number }
+    >({
+      query: (arg) => {
+        const { user_id } = arg;
+        return {
+          url: "tournaments/",
+          params: { user_id },
+        };
+      },
+    }),
   }),
 });
 
-export const { useTournamentMutation } = tournamentApi;
+export const { useTournamentMutation, useGetTournamentsByUserIdQuery } =
+  tournamentApi;

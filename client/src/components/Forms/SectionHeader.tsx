@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React from "react";
 
@@ -19,5 +19,11 @@ export const SectionHeader: React.FC<SectionHeaderProps> = (props) => {
     </Typography>
   );
 };
+
+export const PageSection = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  display: "flex",
+  flexDirection: "column",
+}));
 
 export default SectionHeader;

@@ -5,8 +5,6 @@ import {
   Container,
   CssBaseline,
   Grid,
-  Paper,
-  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -18,6 +16,9 @@ import { greyBackgroundColor } from "../../Theme/theme";
 import { UserInfoContainer, UserInfoForm } from "../../Forms/userInfoStyles";
 import UserProfileInformation from "./UserProfileInformation";
 import UserSettings from "./UserSettings";
+import { useGetTournamentsByUserIdQuery } from "../../../app/services/tournament";
+import { PageSection } from "../../Forms/SectionHeader";
+import TournamentSection from "./Tournaments/TournamentSection";
 
 export const UserProfileView: React.FC = () => {
   const { push } = useHistory();
@@ -28,9 +29,12 @@ export const UserProfileView: React.FC = () => {
 
   const { data, isLoading } = useGetUserQuery(id);
 
+  const { data: tournamentData, isLoading: tournamentDataIsLoading } =
+    useGetTournamentsByUserIdQuery({ user_id: parseInt(id) });
+
   if (isLoading) {
     return (
-      <Backdrop open={isLoading}>
+      <Backdrop open={isLoading && tournamentDataIsLoading}>
         <CircularProgress />
       </Backdrop>
     );
@@ -53,27 +57,24 @@ export const UserProfileView: React.FC = () => {
         <UserInfoContainer>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Paper
-                sx={{
-                  p: 3,
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
+              <PageSection>
                 {data && <UserProfileInformation user={data} />}
-              </Paper>
+              </PageSection>
+            </Grid>
+            <Grid item xs={12}>
+              {tournamentData && tournamentData.items.length > 0 && (
+                <PageSection>
+                  <TournamentSection
+                    tournaments={tournamentData}
+                  ></TournamentSection>
+                </PageSection>
+              )}
             </Grid>
             <Grid item xs={12}>
               {user.user && user.user.user_id == parseInt(id) && (
-                <Paper
-                  sx={{
-                    p: 3,
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
+                <PageSection>
                   <UserSettings user={user.user} />
-                </Paper>
+                </PageSection>
               )}
             </Grid>
           </Grid>
