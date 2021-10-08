@@ -7,6 +7,7 @@ import {
   User,
   UserResponse,
 } from "./auth";
+import PaginatedData from "./pagination";
 
 export type Users = User[];
 
@@ -28,12 +29,12 @@ export const userApi = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ["User", "CurrentUser"],
   endpoints: (build) => ({
-    getUsers: build.query<Users, void>({
+    getUsers: build.query<PaginatedData<User>, void>({
       query: () => "users",
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ user_id }) => ({
+              ...result.items.map(({ user_id }) => ({
                 type: "User" as const,
                 user_id,
               })),

@@ -135,7 +135,15 @@ const NavigationBar = () => {
                 </Typography>
               </HomeLink>
             </Grid>
-            <Grid item></Grid>
+            <Grid item>
+              <Grid container>
+                <Grid item>
+                  <Button color="primary" onClick={() => push("/tournaments")}>
+                    Tournaments
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
             <Grid item alignSelf="center">
               {loginSection}
             </Grid>

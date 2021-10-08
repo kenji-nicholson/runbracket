@@ -5,25 +5,32 @@ import {
   Container,
   CssBaseline,
   Grid,
+  Tab,
+  Tabs,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
+import { useGetTournamentsByUserIdQuery } from "../../../app/services/tournament";
 import { useGetUserQuery } from "../../../app/services/user";
 import { RootState } from "../../../app/store";
+import { PageSection } from "../../Forms/SectionHeader";
+import { UserInfoContainer } from "../../Forms/userInfoStyles";
 import { greyBackgroundColor } from "../../Theme/theme";
-import { UserInfoContainer, UserInfoForm } from "../../Forms/userInfoStyles";
+import TournamentSection from "./Tournaments/TournamentSection";
 import UserProfileInformation from "./UserProfileInformation";
 import UserSettings from "./UserSettings";
-import { useGetTournamentsByUserIdQuery } from "../../../app/services/tournament";
-import { PageSection } from "../../Forms/SectionHeader";
-import TournamentSection from "./Tournaments/TournamentSection";
 
 export const UserProfileView: React.FC = () => {
   const { push } = useHistory();
 
   const user = useSelector((state: RootState) => state.auth);
+  const [selectedTab, setSelectedTab] = useState(0);
+  const handleChange = (event: React.SyntheticEvent, tab: number) => {
+    setSelectedTab(tab);
+  };
 
   const { id } = useParams<{ id: string }>();
 
@@ -32,6 +39,8 @@ export const UserProfileView: React.FC = () => {
   const { data: tournamentData, isLoading: tournamentDataIsLoading } =
     useGetTournamentsByUserIdQuery({ user_id: parseInt(id) });
 
+  const isCurrentUser = user.user && user.user.user_id == parseInt(id);
+  const hasTournaments = tournamentData && tournamentData.items.length > 0;
   if (isLoading) {
     return (
       <Backdrop open={isLoading && tournamentDataIsLoading}>
@@ -62,20 +71,25 @@ export const UserProfileView: React.FC = () => {
               </PageSection>
             </Grid>
             <Grid item xs={12}>
-              {tournamentData && tournamentData.items.length > 0 && (
+              <>
+                <Tabs value={selectedTab} onChange={handleChange}>
+                  <Tab label="Tournaments" />
+                  {isCurrentUser && <Tab label="Settings" />}
+                </Tabs>
                 <PageSection>
-                  <TournamentSection
-                    tournaments={tournamentData}
-                  ></TournamentSection>
+                  {selectedTab === 0 &&
+                    (hasTournaments ? (
+                      <TournamentSection
+                        tournaments={tournamentData}
+                      ></TournamentSection>
+                    ) : (
+                      <Typography>No tournaments created yet.</Typography>
+                    ))}
+                  {user.user && selectedTab === 1 && (
+                    <UserSettings user={user.user} />
+                  )}
                 </PageSection>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              {user.user && user.user.user_id == parseInt(id) && (
-                <PageSection>
-                  <UserSettings user={user.user} />
-                </PageSection>
-              )}
+              </>
             </Grid>
           </Grid>
         </UserInfoContainer>

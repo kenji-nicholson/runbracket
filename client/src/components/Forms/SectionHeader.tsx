@@ -26,4 +26,12 @@ export const PageSection = styled(Paper)(({ theme }) => ({
   flexDirection: "column",
 }));
 
+export const PageTitle: React.FC<SectionHeaderProps> = (props) => {
+  return (
+    <Typography marginY={3} variant="h2" component="h1" color="primary">
+      {props.children}
+    </Typography>
+  );
+};
+
 export default SectionHeader;

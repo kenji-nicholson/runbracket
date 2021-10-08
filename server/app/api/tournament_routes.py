@@ -28,6 +28,7 @@ class TournamentAPI(MethodView, PaginatedAPIMixin):
         if tournament_id is None:
             user = request.args.get('user_id')
             query = Tournament.query if user is None else Tournament.query.filter_by(user_id=user)
+            query = query.order_by(Tournament.date.desc())
             page = request.args.get('page', 1, type=int)
             per_page = min(request.args.get('per_page', 10, type=int), 100)
             data = self.get_paginated_collection(query, self.tournament_list_schema, page, per_page,

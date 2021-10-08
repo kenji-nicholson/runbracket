@@ -5,7 +5,7 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import { logOut, refreshToken, setCredentials } from "../slices/authSlice";
+import { logOut, refreshToken } from "../slices/authSlice";
 import { RootState } from "../store";
 
 export interface User {

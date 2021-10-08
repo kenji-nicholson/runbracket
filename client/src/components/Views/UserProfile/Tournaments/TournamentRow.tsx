@@ -1,6 +1,7 @@
-import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { ListItem, ListItemButton, ListItemText } from "@mui/material";
 import moment from "moment";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { Tournament } from "../../../../app/services/tournament";
 
 interface Props {
@@ -8,17 +9,22 @@ interface Props {
 }
 
 const TournamentRow: React.FC<Props> = (props) => {
-  const { tournament_name, date } = props.tournament;
-  console.log(date);
+  const { push } = useHistory();
+  const { tournament_name, date, tournament_id } = props.tournament;
+  const handleClick = () => {
+    push(`/tournaments/${tournament_id}`);
+  };
   const tournament_date = date
     ? moment.utc(date).local().format("MMM Do, YYYY")
     : null;
   return (
     <ListItem>
-      <ListItemText
-        primary={tournament_name}
-        secondary={tournament_date?.toString()}
-      ></ListItemText>
+      <ListItemButton onClick={handleClick}>
+        <ListItemText
+          primary={tournament_name}
+          secondary={tournament_date?.toString()}
+        ></ListItemText>
+      </ListItemButton>
     </ListItem>
   );
 };

@@ -1,5 +1,6 @@
 import { styled } from "@mui/material/styles";
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Box, Button } from "@mui/material";
+import { greyBackgroundColor } from "../Theme/theme";
 
 export const UserInfoContainer = styled("div")(({ theme }) => ({
   marginTop: theme.spacing(8),
@@ -21,4 +22,11 @@ export const UserInfoForm = styled("form")(({ theme }) => ({
 
 export const UserInfoSubmit = styled(Button)(({ theme }) => ({
   margin: theme.spacing(3, 0, 2),
+}));
+
+export const BackgroundBox = styled(Box)(({ theme }) => ({
+  height: "100vh",
+  overflow: "auto",
+  flexGrow: 1,
+  backgroundColor: greyBackgroundColor(theme),
 }));

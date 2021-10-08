@@ -1,5 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "../store";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithReauth } from "./auth";
 import PaginatedData from "./pagination";
 
@@ -51,6 +50,12 @@ export const tournamentApi = createApi({
         body: tournament,
       }),
     }),
+    getTournaments: builder.query<PaginatedData<Tournament>, void>({
+      query: () => "tournaments/",
+    }),
+    getTournament: builder.query<Tournament, string>({
+      query: (id) => `tournaments/${id}`,
+    }),
     getTournamentsByUserId: builder.query<
       PaginatedData<Tournament>,
       { user_id: number }
@@ -66,5 +71,9 @@ export const tournamentApi = createApi({
   }),
 });
 
-export const { useTournamentMutation, useGetTournamentsByUserIdQuery } =
-  tournamentApi;
+export const {
+  useTournamentMutation,
+  useGetTournamentsByUserIdQuery,
+  useGetTournamentsQuery,
+  useGetTournamentQuery,
+} = tournamentApi;

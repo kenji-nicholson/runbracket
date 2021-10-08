@@ -23,7 +23,7 @@ interface Props {
   watch: UseFormWatch<Tournament>;
 }
 
-const TournamentParticipants: React.FC<Props> = (props) => {
+const CreateTournamentParticipants: React.FC<Props> = (props) => {
   const { control, watch } = props;
 
   const { fields, append, remove } = useFieldArray({
@@ -103,4 +103,4 @@ const TournamentParticipants: React.FC<Props> = (props) => {
   );
 };
 
-export default TournamentParticipants;
+export default CreateTournamentParticipants;

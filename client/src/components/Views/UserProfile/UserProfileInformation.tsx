@@ -20,7 +20,7 @@ const UserProfileInformation: React.FC<Props> = (props) => {
           <Typography variant="h5" component="h1">
             {user.display_name}
           </Typography>
-          <Typography variant="body1">
+          <Typography variant="body1" sx={{ color: "text.secondary" }}>
             {user.first_name + " " + user.last_name}
           </Typography>
         </Grid>

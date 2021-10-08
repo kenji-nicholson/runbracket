@@ -1,12 +1,5 @@
-import {
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  TextField,
-} from "@mui/material";
-import { PropsWithChildren } from "react";
-import { FieldValues } from "react-hook-form";
-import { Controller, UseControllerProps } from "react-hook-form";
+import { Checkbox, FormControlLabel, TextField } from "@mui/material";
+import { Controller } from "react-hook-form";
 import { DarkModeSwitch } from "./DarkModeSwitch";
 
 interface FormTextFieldProps {

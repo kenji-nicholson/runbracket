@@ -22,8 +22,8 @@ import {
 import { RootState } from "../../../app/store";
 import { greyBackgroundColor } from "../../Theme/theme";
 import { UserInfoContainer, UserInfoForm } from "../../Forms/userInfoStyles";
-import TournamentInformation from "./TournamentInformation";
-import TournamentParticipants from "./TournamentParticipants";
+import CreateTournamentInformation from "./CreateTournamentInformation";
+import CreateTournamentParticipants from "./CreateTournamentParticipants";
 import cloneDeep from "lodash/cloneDeep";
 
 export const CreateTournamentView: React.FC = () => {
@@ -85,7 +85,7 @@ export const CreateTournamentView: React.FC = () => {
     >
       <Container>
         <Helmet>
-          <title>RunBracket - Create Tournament</title>
+          <title>Create Tournament - RunBracket</title>
         </Helmet>
         <CssBaseline />
         <UserInfoContainer>
@@ -109,7 +109,7 @@ export const CreateTournamentView: React.FC = () => {
                     flexDirection: "column",
                   }}
                 >
-                  <TournamentInformation control={control} />
+                  <CreateTournamentInformation control={control} />
                 </Paper>
               </Grid>
               <Grid item xs={12}>
@@ -120,7 +120,10 @@ export const CreateTournamentView: React.FC = () => {
                     flexDirection: "column",
                   }}
                 >
-                  <TournamentParticipants control={control} watch={watch} />
+                  <CreateTournamentParticipants
+                    control={control}
+                    watch={watch}
+                  />
                 </Paper>
               </Grid>
               <Grid item marginLeft="auto" xs={3} marginTop={1}>

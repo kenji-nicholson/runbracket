@@ -9,7 +9,7 @@ interface Props {
   control: Control<Tournament, object>;
 }
 
-const TournamentInformation: React.FC<Props> = (props) => {
+const CreateTournamentInformation: React.FC<Props> = (props) => {
   const { control } = props;
   return (
     <>
@@ -38,4 +38,4 @@ const TournamentInformation: React.FC<Props> = (props) => {
   );
 };
 
-export default TournamentInformation;
+export default CreateTournamentInformation;

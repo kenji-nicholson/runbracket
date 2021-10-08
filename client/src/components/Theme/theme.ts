@@ -27,7 +27,7 @@ export const darkTheme: Theme = createTheme({
 export const greyBackgroundColor = (theme: Theme) => {
   return theme.palette.mode === "light"
     ? theme.palette.grey[100]
-    : theme.palette.grey[900];
+    : theme.palette.background.default;
 };
 
 export default theme;

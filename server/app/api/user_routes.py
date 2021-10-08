@@ -43,8 +43,10 @@ class UserAPI(MethodView, PaginatedAPIMixin):
     def post(self):
         try:
             data = request.get_json()
-            user = self.user_schema.load(data)
+            print(data, file=sys.stderr)
+            user = self.current_user_schema.load(data)
             if User.query.filter(or_(User.email == user.email, User.display_name == user.display_name)).first():
+                print(user.email, file=sys.stderr)
                 return bad_request('Please use a different email and/or display name.')
             if 'password' not in data:
                 return bad_request('Password is required')

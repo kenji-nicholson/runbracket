@@ -7,6 +7,8 @@ import { CssBaseline } from "@mui/material";
 import CreateTournamentView from "./components/Views/CreateTournament/CreateTournamentView";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { UserProfileView } from "./components/Views/UserProfile/UserProfileView";
+import TournamentsView from "./components/Views/Tournaments/TournamentsView";
+import TournamentView from "./components/Views/Tournament/TournamentView";
 
 const App: React.FC = () => {
   return (
@@ -17,12 +19,14 @@ const App: React.FC = () => {
         <Route exact component={LoginView} path="/login" />
         <Route exact component={RegisterView} path="/register" />
         <Route exact component={HomeView} path="/" />
+        <Route exact component={TournamentsView} path="/tournaments" />
         <ProtectedRoute
           exact
           component={CreateTournamentView}
           path="/tournaments/new"
         />
         <ProtectedRoute exact component={UserProfileView} path="/users/:id" />
+        <Route exact component={TournamentView} path="/tournaments/:id" />
       </Switch>
     </>
   );

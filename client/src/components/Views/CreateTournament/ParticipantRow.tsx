@@ -1,5 +1,5 @@
-import { IconButton, TableCell, TableRow, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { IconButton, TableCell, TableRow } from "@mui/material";
 import React from "react";
 import { Control, FieldArrayWithId } from "react-hook-form";
 import { Tournament } from "../../../app/services/tournament";
