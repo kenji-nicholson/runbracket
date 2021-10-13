@@ -48,6 +48,7 @@ export const userApi = createApi({
         method: "POST",
         body: registerRequest,
       }),
+      invalidatesTags: ["User"],
     }),
     getUser: build.query<User, string>({
       query: (id) => `users/${id}`,

@@ -13,7 +13,7 @@ import React, { BaseSyntheticEvent, useState } from "react";
 import { Control, useFieldArray, useForm, UseFormWatch } from "react-hook-form";
 import { Tournament, Participant } from "../../../app/services/tournament";
 import SectionHeader from "../../Forms/SectionHeader";
-import ParticipantRow from "./ParticipantRow";
+import CreateParticipantRow from "./CreateParticipantRow";
 import { string, object } from "yup";
 import { FormCheckbox, FormTextField } from "../../Forms/FormComponents";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -84,7 +84,7 @@ const CreateTournamentParticipants: React.FC<Props> = (props) => {
             <TableBody>
               {fields.map((item, index) => {
                 return (
-                  <ParticipantRow
+                  <CreateParticipantRow
                     key={item.id}
                     {...{ item, control: control, remove, index, is_seeded }}
                   />

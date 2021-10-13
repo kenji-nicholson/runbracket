@@ -1,8 +1,17 @@
-import { Grid, Typography } from "@mui/material";
+import {
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  Typography,
+} from "@mui/material";
 import { palette } from "@mui/system";
 import moment from "moment";
 import React from "react";
 import { Tournament } from "../../../app/services/tournament";
+import SectionHeader from "../../Forms/SectionHeader";
+import ParticipantRow from "./ParticipantRow";
 
 interface Props {
   tournament: Tournament;
@@ -18,15 +27,25 @@ const TournamentParticipants: React.FC<Props> = (props) => {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h5">{tournament.tournament_name}</Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              color: "text.secondary",
-            }}
-          >
-            Participants
-          </Typography>
+          <SectionHeader>Participants</SectionHeader>
+        </Grid>
+        <Grid item xs={12}>
+          <Table>
+            <TableHead>
+              <TableCell width="10%">Seed</TableCell>
+              <TableCell width="80%">Name</TableCell>
+            </TableHead>
+            <TableBody>
+              {tournament.participants.map((item) => {
+                return (
+                  <ParticipantRow
+                    key={item.participant_id}
+                    participant={item}
+                  />
+                );
+              })}
+            </TableBody>
+          </Table>
         </Grid>
       </Grid>
     </>

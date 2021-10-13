@@ -13,7 +13,7 @@ interface Props {
   is_seeded: boolean;
 }
 
-const ParticipantRow: React.FC<Props> = (props) => {
+const CreateParticipantRow: React.FC<Props> = (props) => {
   const { item, control, remove, index, is_seeded } = props;
   return (
     <>
@@ -37,4 +37,4 @@ const ParticipantRow: React.FC<Props> = (props) => {
   );
 };
 
-export default ParticipantRow;
+export default CreateParticipantRow;

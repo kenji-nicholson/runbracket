@@ -42,6 +42,7 @@ export interface Tournament {
 export const tournamentApi = createApi({
   reducerPath: "tournamentApi",
   baseQuery: baseQueryWithReauth,
+  tagTypes: ["Tournament"],
   endpoints: (builder) => ({
     tournament: builder.mutation<Tournament, Tournament>({
       query: (tournament) => ({
@@ -49,12 +50,26 @@ export const tournamentApi = createApi({
         method: "POST",
         body: tournament,
       }),
+      invalidatesTags: ["Tournament"],
     }),
     getTournaments: builder.query<PaginatedData<Tournament>, void>({
       query: () => "tournaments/",
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.items.map(({ tournament_id }) => ({
+                type: "Tournament" as const,
+                tournament_id,
+              })),
+              { type: "Tournament", tournament_id: "LIST" },
+            ]
+          : [{ type: "Tournament", tournament_id: "LIST" }],
     }),
     getTournament: builder.query<Tournament, string>({
       query: (id) => `tournaments/${id}`,
+      providesTags: (result, error, tournament_id) => [
+        { type: "Tournament", tournament_id },
+      ],
     }),
     getTournamentsByUserId: builder.query<
       PaginatedData<Tournament>,

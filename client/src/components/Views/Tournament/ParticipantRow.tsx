@@ -6,7 +6,7 @@ interface Props {
   participant: Participant;
 }
 
-const Participant: React.FC<Props> = (props) => {
+const ParticipantRow: React.FC<Props> = (props) => {
   const { participant } = props;
   return (
     <>
@@ -22,4 +22,4 @@ const Participant: React.FC<Props> = (props) => {
   );
 };
 
-export default Participant;
+export default ParticipantRow;
