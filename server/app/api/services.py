@@ -34,7 +34,9 @@ def advance_byes(tournament_id):
             participant = match.participant_a if match.participant_a else match.participant_b
             next_match = Match.query.get(match.winner_match_id)
             next_match.participant_a_id = participant.participant_id
-            match.match_status = StatusEnum.COMPLETED
+            match.winner_id = participant.participant_id
+            match.date = datetime.utcnow()
+            match.status = StatusEnum.COMPLETED
             db.session.flush()
 
 

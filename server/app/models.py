@@ -40,6 +40,7 @@ class Match(db.Model):
 
     participant_a_score = db.Column(db.Integer, default=0)
     participant_b_score = db.Column(db.Integer, default=0)
+    winner_id = db.Column(db.Integer, db.ForeignKey('participant.participant_id'))
 
     participant_a_id = db.Column(db.Integer, db.ForeignKey('participant.participant_id'))
     participant_a = db.relationship('Participant', backref=backref('matches', lazy='dynamic'),

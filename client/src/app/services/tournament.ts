@@ -23,6 +23,7 @@ export interface Match {
   participant_b_score: number;
   participant_a: Participant;
   participant_b: Participant;
+  winner_id: null | number;
 }
 
 export type Tournaments = Tournament[];

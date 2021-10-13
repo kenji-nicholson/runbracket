@@ -29,10 +29,11 @@ class MatchSchema(SQLAlchemySchema):
     match_id = fields.Integer()
     winner_match_id = fields.Integer()
     round = fields.Integer()
-    match_status = fields.Str(validate=validate.OneOf(['not_started', 'in_progress', 'completed']))
+    status = fields.String()
     date = fields.DateTime()
     participant_a_score = fields.Integer()
     participant_b_score = fields.Integer()
+    winner_id = fields.Integer(allow_none=True)
     participant_a = fields.Nested(ParticipantSchema)
     participant_b = fields.Nested(ParticipantSchema)
 

@@ -66,8 +66,7 @@ export const CreateTournamentView: React.FC = () => {
         user_id: user.user ? user.user.user_id : null,
       };
       const response = await createTournament(tournament).unwrap();
-      console.log(response);
-      push("/");
+      push(`tournaments/${response.tournament_id}`);
     } catch (err) {
       console.log(err);
       setOpen(true);
