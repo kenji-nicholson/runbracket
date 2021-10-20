@@ -59,6 +59,10 @@ export const CreateTournamentView: React.FC = () => {
     setOpen(false);
   };
 
+  const checkKeyDown = (e: React.KeyboardEvent) => {
+    if (e.code === "Enter") e.preventDefault();
+  };
+
   const onSubmit = async (data: Tournament) => {
     try {
       const tournament = {
@@ -88,7 +92,10 @@ export const CreateTournamentView: React.FC = () => {
         </Helmet>
         <CssBaseline />
         <UserInfoContainer>
-          <UserInfoForm onSubmit={handleSubmit(onSubmit)}>
+          <UserInfoForm
+            onSubmit={handleSubmit(onSubmit)}
+            onKeyDown={(e) => checkKeyDown(e)}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography

@@ -9,13 +9,17 @@ import {
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useGetTournamentsQuery } from "../../../app/services/tournament";
+import useQuery from "../../../hooks/routing";
 import { PageSection, PageTitle } from "../../Forms/SectionHeader";
 import { UserInfoContainer } from "../../Forms/userInfoStyles";
+import { PaginationLink } from "../../Pagination/PaginationLink";
 import { greyBackgroundColor } from "../../Theme/theme";
 import TournamentRow from "../UserProfile/Tournaments/TournamentRow";
 
 const TournamentsView = () => {
-  const { data, isLoading } = useGetTournamentsQuery();
+  let query = useQuery();
+  const page = query.get("page") || "1";
+  const { data, isLoading } = useGetTournamentsQuery({ page: parseInt(page) });
 
   if (isLoading) {
     return (
@@ -39,7 +43,7 @@ const TournamentsView = () => {
           <Helmet>
             <title>Tournaments - RunBracket</title>
           </Helmet>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} paddingBottom={1}>
             <Grid item xs={12}>
               <PageTitle>Tournaments</PageTitle>
             </Grid>
@@ -59,6 +63,10 @@ const TournamentsView = () => {
               </PageSection>
             </Grid>
           </Grid>
+          <PaginationLink
+            baseLink="/tournaments"
+            count={data?._meta.total_pages}
+          ></PaginationLink>
         </UserInfoContainer>
       </Container>
     </Box>

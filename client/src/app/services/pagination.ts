@@ -12,3 +12,7 @@ export default interface PaginatedData<T> {
     prev: string;
   };
 }
+
+export interface PaginationArguments {
+  page: number;
+}

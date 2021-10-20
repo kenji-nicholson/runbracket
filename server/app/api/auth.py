@@ -32,7 +32,6 @@ def login():
 @bp.route("/token/refresh", methods=["POST"])
 @jwt_required(refresh=True)
 def refresh():
-    print("test", file=sys.stderr)
     identity = get_jwt_identity()
     access_token = create_access_token(identity=identity)
     return jsonify(token=access_token)

@@ -33,7 +33,7 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=1)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=30)
     app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=15)
     db.init_app(app)
     migrate.init_app(app, db)

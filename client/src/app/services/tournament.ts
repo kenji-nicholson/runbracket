@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithReauth } from "./auth";
-import PaginatedData from "./pagination";
+import PaginatedData, { PaginationArguments } from "./pagination";
 
 export enum Status {
   NOT_STARTED = "not_started",
@@ -53,8 +53,17 @@ export const tournamentApi = createApi({
       }),
       invalidatesTags: ["Tournament"],
     }),
-    getTournaments: builder.query<PaginatedData<Tournament>, void>({
-      query: () => "tournaments/",
+    getTournaments: builder.query<
+      PaginatedData<Tournament>,
+      PaginationArguments
+    >({
+      query: (arg) => {
+        const { page } = arg;
+        return {
+          url: "tournaments/",
+          params: { page },
+        };
+      },
       providesTags: (result) =>
         result
           ? [

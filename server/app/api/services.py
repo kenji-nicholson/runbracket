@@ -33,7 +33,10 @@ def advance_byes(tournament_id):
         if match.participant_a is None or match.participant_b is None:
             participant = match.participant_a if match.participant_a else match.participant_b
             next_match = Match.query.get(match.winner_match_id)
-            next_match.participant_a_id = participant.participant_id
+            if next_match.participant_a_id is not None:
+                next_match.participant_b_id = participant.participant_id
+            else:
+                next_match.participant_a_id = participant.participant_id
             match.winner_id = participant.participant_id
             match.date = datetime.utcnow()
             match.status = StatusEnum.COMPLETED

@@ -24,6 +24,7 @@ export const PageSection = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   display: "flex",
   flexDirection: "column",
+  overflowX: "auto",
 }));
 
 export const PageTitle: React.FC<SectionHeaderProps> = (props) => {

@@ -40,6 +40,12 @@ const CreateTournamentParticipants: React.FC<Props> = (props) => {
   const [participant, setParticipant] =
     useState<Participant>(defaultParticipant);
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      addParticipant();
+    }
+  };
+
   const addParticipant = () => {
     if (participant.participant_name) {
       append(participant);
@@ -55,6 +61,7 @@ const CreateTournamentParticipants: React.FC<Props> = (props) => {
           <TextField
             fullWidth
             label="Name"
+            onKeyDown={handleKeyDown}
             onChange={(e) =>
               setParticipant({
                 ...participant,
