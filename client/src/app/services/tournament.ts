@@ -2,10 +2,10 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithReauth } from "./auth";
 import PaginatedData, { PaginationArguments } from "./pagination";
 
-export enum Status {
-  NOT_STARTED = "not_started",
-  IN_PROGRESS = "in_progress",
-  COMPLETED = "completed",
+export enum StatusEnum {
+  NOT_STARTED = "StatusEnum.NOT_STARTED",
+  IN_PROGRESS = "StatusEnum.IN_PROGRESS",
+  COMPLETED = "StatusEnum.COMPLETED",
 }
 
 export interface Participant {
@@ -16,9 +16,9 @@ export interface Participant {
 
 export interface Match {
   match_id: null | number;
-  match_status: Status;
   round: number;
   date: Date;
+  status: StatusEnum;
   participant_a_score: number;
   participant_b_score: number;
   participant_a: Participant;
@@ -26,12 +26,17 @@ export interface Match {
   winner_id: null | number;
 }
 
+export interface UpdateMatchRequest {
+  match: Match;
+  winner: Participant | null;
+}
+
 export type Tournaments = Tournament[];
 
 export interface Tournament {
   user_id: null | number;
   tournament_id: null | number;
-  tournament_status: null | Status;
+  tournament_status: null | StatusEnum;
   tournament_name: string;
   tournament_description: string;
   is_seeded: boolean;

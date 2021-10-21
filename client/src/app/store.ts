@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { authApi } from "./services/auth";
 import authReducer from "./slices/authSlice";
+import tournamentReducer from "./slices/tournamentSlice";
 import { userApi } from "./services/user";
 import {
   persistStore,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   [tournamentApi.reducerPath]: tournamentApi.reducer,
   auth: authReducer,
+  tournament: tournamentReducer,
 });
 
 const persistConfig = {

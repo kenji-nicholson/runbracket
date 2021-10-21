@@ -107,4 +107,8 @@ class LoginSchema(Schema):
     password = fields.String(required=True)
 
 
+class UpdateMatchSchema(SQLAlchemySchema):
+    match = fields.Nested(MatchSchema, required=True)
+    winner = fields.Nested(ParticipantSchema, allow_none=True)
+
 

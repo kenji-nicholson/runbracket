@@ -7,10 +7,19 @@ import {
   Tabs,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useGetTournamentQuery } from "../../../app/services/tournament";
+import { Match, useGetTournamentQuery } from "../../../app/services/tournament";
+import {
+  closeDialog,
+  setPermission,
+  showDialogForMatch,
+} from "../../../app/slices/tournamentSlice";
+import { RootState } from "../../../app/store";
+import { useAppDispatch } from "../../../hooks/store";
 import { PageSection } from "../../Forms/SectionHeader";
 import { BackgroundBox, UserInfoContainer } from "../../Forms/userInfoStyles";
+import RecordMatchDialog from "./RecordMatchDialog";
 import TournamentBracket from "./TournamentBracket";
 import TournamentInformation from "./TournamentInformation";
 import TournamentParticipants from "./TournamentParticipants";
@@ -21,6 +30,27 @@ const TournamentView: React.FC<Props> = () => {
   const { id } = useParams<{ id: string }>();
   const { data: tournament, isLoading } = useGetTournamentQuery(id);
   const [selectedTab, setSelectedTab] = useState(0);
+  const selectedMatch = useSelector(
+    (state: RootState) => state.tournament.selectedMatch
+  );
+  const open = useSelector((state: RootState) => state.tournament.dialogOpen);
+  const dispatch = useAppDispatch();
+
+  const handleClose = () => {
+    dispatch(closeDialog());
+  };
+
+  const handleOpen = (match: Match) => {
+    dispatch(showDialogForMatch(match));
+  };
+
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  dispatch(
+    setPermission(
+      Boolean(tournament && user && tournament.user_id == user.user_id)
+    )
+  );
 
   const handleChange = (event: React.SyntheticEvent, tab: number) => {
     setSelectedTab(tab);
@@ -66,6 +96,13 @@ const TournamentView: React.FC<Props> = () => {
             </Grid>
           </Grid>
         </UserInfoContainer>
+        {selectedMatch && (
+          <RecordMatchDialog
+            open={open}
+            onClose={handleClose}
+            match={selectedMatch}
+          />
+        )}
       </Container>
     </BackgroundBox>
   );
