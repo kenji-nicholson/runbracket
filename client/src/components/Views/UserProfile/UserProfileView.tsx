@@ -31,13 +31,17 @@ export const UserProfileView: React.FC = () => {
   const handleChange = (event: React.SyntheticEvent, tab: number) => {
     setSelectedTab(tab);
   };
-
+  const [page, setPage] = useState(1);
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading } = useGetUserQuery(id);
 
   const { data: tournamentData, isLoading: tournamentDataIsLoading } =
-    useGetTournamentsByUserIdQuery({ user_id: parseInt(id) });
+    useGetTournamentsByUserIdQuery({
+      page: page,
+      per_page: 5,
+      user_id: parseInt(id),
+    });
 
   const isCurrentUser = user.user && user.user.user_id == parseInt(id);
   const hasTournaments = tournamentData && tournamentData.items.length > 0;
@@ -81,6 +85,9 @@ export const UserProfileView: React.FC = () => {
                     (hasTournaments ? (
                       <TournamentSection
                         tournaments={tournamentData}
+                        count={tournamentData._meta.total_pages}
+                        page={page}
+                        setPage={setPage}
                       ></TournamentSection>
                     ) : (
                       <Typography>No tournaments created yet.</Typography>

@@ -15,4 +15,6 @@ export default interface PaginatedData<T> {
 
 export interface PaginationArguments {
   page: number;
+  per_page: number;
+  [x: string]: any;
 }

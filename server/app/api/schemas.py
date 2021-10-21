@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields, validate, EXCLUDE
 from marshmallow_sqlalchemy import SQLAlchemySchema
 from app.models import *
+from marshmallow_enum import EnumField
 from app import db
 
 
@@ -27,10 +28,10 @@ class MatchSchema(SQLAlchemySchema):
 
     tournament_id = fields.Integer()
     match_id = fields.Integer()
-    winner_match_id = fields.Integer()
+    winner_match_id = fields.Integer(allow_none=True)
     round = fields.Integer()
-    status = fields.String()
-    date = fields.DateTime()
+    status = EnumField(StatusEnum)
+    date = fields.DateTime(allow_none=True)
     participant_a_score = fields.Integer()
     participant_b_score = fields.Integer()
     winner_id = fields.Integer(allow_none=True)
@@ -47,7 +48,7 @@ class TournamentSchema(SQLAlchemySchema):
 
     user_id = fields.Integer(required=True)
     tournament_id = fields.Integer()
-    tournament_status = fields.Str(validate=validate.OneOf(['not_started', 'in_progress', 'completed']))
+    status = EnumField(StatusEnum)
     tournament_name = \
         fields.String(required=True, validate=validate.Length(max=Tournament.TOURNAMENT_NAME_LENGTH, min=1))
     tournament_description = \
@@ -67,7 +68,7 @@ class TournamentListSchema(SQLAlchemySchema):
 
     user_id = fields.Integer()
     tournament_id = fields.Integer()
-    tournament_status = fields.Str(validate=validate.OneOf(['not_started', 'in_progress', 'completed']))
+    status = EnumField(StatusEnum)
     tournament_name = \
         fields.String()
     tournament_description = \
@@ -107,8 +108,6 @@ class LoginSchema(Schema):
     password = fields.String(required=True)
 
 
-class UpdateMatchSchema(SQLAlchemySchema):
-    match = fields.Nested(MatchSchema, required=True)
-    winner = fields.Nested(ParticipantSchema, allow_none=True)
+
 
 

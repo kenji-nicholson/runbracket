@@ -4,6 +4,7 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TableRow,
   Typography,
 } from "@mui/material";
 import { palette } from "@mui/system";
@@ -32,8 +33,10 @@ const TournamentParticipants: React.FC<Props> = (props) => {
         <Grid item xs={12}>
           <Table>
             <TableHead>
-              <TableCell width="10%">Seed</TableCell>
-              <TableCell width="80%">Name</TableCell>
+              <TableRow>
+                <TableCell width="10%">Seed</TableCell>
+                <TableCell width="80%">Name</TableCell>
+              </TableRow>
             </TableHead>
             <TableBody>
               {tournament.participants.map((item) => {

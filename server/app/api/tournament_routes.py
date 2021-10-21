@@ -11,7 +11,7 @@ from marshmallow import ValidationError
 from app.api.services import create_tournament, advance_participant
 from app.models import Tournament, Match, Participant, User
 from app.api.api_functions import register_api, PaginatedAPIMixin
-from app.api.schemas import TournamentSchema, MatchSchema, ParticipantSchema, TournamentListSchema, UpdateMatchSchema
+from app.api.schemas import TournamentSchema, MatchSchema, ParticipantSchema, TournamentListSchema
 from app.api.errors import bad_request, forbidden
 from app import db
 
@@ -66,8 +66,8 @@ class TournamentMatchesAPI(MethodView):
     Endpoints for managing/viewing matches belonging to a specified tournament.
     """
 
-    match_schema = MatchSchema()
-    update_match_schema = UpdateMatchSchema(session=db.session)
+    match_schema = MatchSchema(session=db.session)
+    participant_schema = ParticipantSchema(session=db.session)
 
     def get(self, tournament_id, match_id):
         if match_id is None:
@@ -82,7 +82,7 @@ class TournamentMatchesAPI(MethodView):
             match = Match.query.get(match_id)
             if not match:
                 return bad_request('Match does not exist!')
-            return self.match_schema.dump(match)
+            return jsonify(self.match_schema.dump(match))
 
     def delete(self, tournament_id, match_id):
         pass
@@ -95,10 +95,11 @@ class TournamentMatchesAPI(MethodView):
             if current_user != tournament.user_id:
                 return forbidden("Permission denied.")
             data = request.get_json()
-            match_request = self.update_match_schema.load(data)
-            if match_request.winner is not None:
-                advance_participant(match_request.match, match_request.participant)
+            match = self.match_schema.load(data)
+            if match.winner_id is not None:
+                advance_participant(match)
             db.session.commit()
+            return jsonify(self.match_schema.dump(match))
         except ValidationError as err:
             db.session.rollback()
             return bad_request(err.messages)

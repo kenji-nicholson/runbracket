@@ -10,6 +10,7 @@ import {
   Match,
   Participant,
   UpdateMatchRequest,
+  useUpdateMatchMutation,
 } from "../../../app/services/tournament";
 import {
   Container,
@@ -23,6 +24,8 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { Close } from "@mui/icons-material";
 import { FormTextField } from "../../Forms/FormComponents";
+import cloneDeep from "lodash/cloneDeep";
+import { useEffect } from "react";
 
 interface DialogProps {
   open: boolean;
@@ -31,25 +34,37 @@ interface DialogProps {
 }
 
 export const RecordMatchDialog: React.FC<DialogProps> = (props) => {
-  const { open, onClose, match } = props;
+  const { open, onClose: closeDialog, match } = props;
 
-  const { handleSubmit, control, getValues, setValue } =
-    useForm<UpdateMatchRequest>({
-      defaultValues: { match: match, winner: null },
-    });
+  const [updateMatch] = useUpdateMatchMutation();
 
-  const onSubmit = async (data: UpdateMatchRequest) => {};
+  const { handleSubmit, control, getValues, setValue, reset } = useForm<Match>({
+    defaultValues: match,
+  });
+
+  useEffect(() => {
+    reset(match);
+  }, [open]);
+
+  const onSubmit = async (data: Match) => {
+    try {
+      const response = await updateMatch(data).unwrap();
+      closeDialog();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div>
-      <Dialog open={open} onClose={onClose}>
+      <Dialog open={open} onClose={closeDialog}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle>
             Record Match
             {
               <IconButton
                 aria-label="close"
-                onClick={onClose}
+                onClick={closeDialog}
                 sx={{
                   position: "absolute",
                   right: 8,
@@ -71,7 +86,7 @@ export const RecordMatchDialog: React.FC<DialogProps> = (props) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormTextField
-                  name="match.participant_a_score"
+                  name="participant_a_score"
                   control={control}
                   label={match.participant_a.participant_name}
                   type="number"
@@ -79,7 +94,7 @@ export const RecordMatchDialog: React.FC<DialogProps> = (props) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormTextField
-                  name="match.participant_b_score"
+                  name="participant_b_score"
                   control={control}
                   label={match.participant_b.participant_name}
                   type="number"
@@ -94,32 +109,29 @@ export const RecordMatchDialog: React.FC<DialogProps> = (props) => {
                     <ToggleButtonGroup
                       color="primary"
                       exclusive
-                      value={getValues("winner")}
+                      value={getValues("winner_id")}
                       onChange={(
                         event: React.MouseEvent,
-                        newAlignment: Participant | null
+                        newAlignment: number
                       ) => {
-                        setValue("winner", newAlignment);
+                        setValue("winner_id", newAlignment);
                       }}
                     >
                       <ToggleButton
-                        value={match.participant_a}
+                        value={match.participant_a.participant_id}
                         key="participant_a"
                       >
                         {match.participant_a.participant_name}
                       </ToggleButton>
-                      <ToggleButton value={null} key="none">
-                        N/A
-                      </ToggleButton>
                       <ToggleButton
-                        value={match.participant_b}
+                        value={match.participant_b.participant_id}
                         key="participant_b"
                       >
                         {match.participant_b.participant_name}
                       </ToggleButton>
                     </ToggleButtonGroup>
                   )}
-                  name="winner"
+                  name="winner_id"
                   control={control}
                 />
               </Grid>
@@ -127,10 +139,8 @@ export const RecordMatchDialog: React.FC<DialogProps> = (props) => {
           </DialogContent>
 
           <DialogActions>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={onClose} type="submit">
-              Save
-            </Button>
+            <Button onClick={closeDialog}>Cancel</Button>
+            <Button type="submit">Save</Button>
           </DialogActions>
         </form>
       </Dialog>

@@ -8,9 +8,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 
 class StatusEnum(Enum):
-    NOT_STARTED = 'not_started'
-    IN_PROGRESS = 'in_progress'
-    COMPLETED = 'completed'
+    NOT_STARTED = 0
+    IN_PROGRESS = 1
+    COMPLETED = 2
 
 
 class Tournament(db.Model):

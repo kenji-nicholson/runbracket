@@ -1,11 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { match } from "assert";
 import { baseQueryWithReauth } from "./auth";
 import PaginatedData, { PaginationArguments } from "./pagination";
 
 export enum StatusEnum {
-  NOT_STARTED = "StatusEnum.NOT_STARTED",
-  IN_PROGRESS = "StatusEnum.IN_PROGRESS",
-  COMPLETED = "StatusEnum.COMPLETED",
+  NOT_STARTED = "NOT_STARTED",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
 }
 
 export interface Participant {
@@ -15,6 +16,7 @@ export interface Participant {
 }
 
 export interface Match {
+  tournament_id: null | number;
   match_id: null | number;
   round: number;
   date: Date;
@@ -63,10 +65,9 @@ export const tournamentApi = createApi({
       PaginationArguments
     >({
       query: (arg) => {
-        const { page } = arg;
         return {
           url: "tournaments/",
-          params: { page },
+          params: { ...arg },
         };
       },
       providesTags: (result) =>
@@ -88,15 +89,24 @@ export const tournamentApi = createApi({
     }),
     getTournamentsByUserId: builder.query<
       PaginatedData<Tournament>,
-      { user_id: number }
+      PaginationArguments
     >({
       query: (arg) => {
-        const { user_id } = arg;
         return {
           url: "tournaments/",
-          params: { user_id },
+          params: { ...arg },
         };
       },
+    }),
+    updateMatch: builder.mutation<Match, Match>({
+      query: (arg) => ({
+        url: `tournaments/${arg.tournament_id}/matches/${arg.match_id}`,
+        method: "PUT",
+        body: arg,
+      }),
+      invalidatesTags: (result, error) => [
+        { type: "Tournament", tournament_id: result?.tournament_id },
+      ],
     }),
   }),
 });
@@ -106,4 +116,5 @@ export const {
   useGetTournamentsByUserIdQuery,
   useGetTournamentsQuery,
   useGetTournamentQuery,
+  useUpdateMatchMutation,
 } = tournamentApi;
