@@ -6,6 +6,7 @@ certifi==2020.12.5
 click==7.1.2
 colorama==0.4.4
 distlib==0.3.1
+enum34==1.1.10
 filelock==3.0.12
 Flask==1.1.2
 Flask-Cors==3.0.10
@@ -15,6 +16,7 @@ Flask-Mail==0.9.1
 flask-marshmallow==0.14.0
 Flask-Migrate==2.6.0
 Flask-SQLAlchemy==2.4.4
+gunicorn==20.1.0
 importlib-metadata==3.4.0
 importlib-resources==5.1.0
 isort==5.9.3
@@ -28,6 +30,7 @@ marshmallow-enum==1.5.1
 marshmallow-sqlalchemy==0.24.2
 mccabe==0.6.1
 pipenv==2020.11.15
+psycopg2-binary==2.9.1
 PyJWT==2.1.0
 pylint==2.9.6
 pylint-flask==0.6
