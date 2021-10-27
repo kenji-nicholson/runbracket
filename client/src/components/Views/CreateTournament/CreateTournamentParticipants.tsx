@@ -106,6 +106,11 @@ const CreateTournamentParticipants: React.FC<Props> = (props) => {
         control={control}
         label="Include seeding"
       ></FormCheckbox>
+      <FormCheckbox
+        name="has_thug_finals"
+        control={control}
+        label="Include Thug Finals"
+      />
     </>
   );
 };

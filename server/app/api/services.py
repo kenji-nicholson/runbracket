@@ -15,7 +15,8 @@ def create_tournament(tournament):
     tournament_id = _insert_tournament(tournament)
     if len(participants) > 0:
         inserted_participants = _insert_participants(participants, tournament_id)
-        matches = _create_matches(inserted_participants, tournament.is_seeded, tournament_id)
+        matches = _create_matches(inserted_participants, tournament.is_seeded, tournament_id,
+                                  tournament.has_thug_finals)
         advance_byes(tournament_id)
     db.session.commit()
     return Tournament.query.get(tournament_id)
@@ -37,15 +38,31 @@ def advance_byes(tournament_id):
 
 
 def advance_participant(match):
+    tournament = Tournament.query.get(match.tournament_id)
     if match.winner_match_id is not None:
         next_match = Match.query.get(match.winner_match_id)
         if next_match.participant_a_id is not None:
             next_match.participant_b_id = match.winner_id
         else:
             next_match.participant_a_id = match.winner_id
+        if tournament.has_thug_finals and next_match.winner_match_id is None:
+            _advance_random_participant(next_match, tournament.participants, match.winner_id)
     match.date = datetime.utcnow()
     match.status = StatusEnum.COMPLETED
     db.session.flush()
+
+
+def _advance_random_participant(match, participants, winner):
+    participant = _get_random_participant(participants, winner)
+    if match.participant_a_id is not None:
+        match.participant_b_id = participant.participant_id
+    else:
+        match.participant_a_id = participant.participant_id
+
+
+def _get_random_participant(participants, exception):
+    possible_choices = [p for p in participants if p != exception]
+    return random.choice(possible_choices)
 
 
 def _insert_tournament(tournament):
@@ -68,7 +85,7 @@ def _insert_participants(participants, tournament_id):
     return participants
 
 
-def _create_matches(participants, is_seeded, tournament_id):
+def _create_matches(participants, is_seeded, tournament_id, has_thug_finals):
     """
     Creates the matches for the tournament, including byes.
     """
@@ -79,6 +96,8 @@ def _create_matches(participants, is_seeded, tournament_id):
     order = _generate_seeded_order(bracket_size)
     first_round = _insert_initial_matches(padded_participants, order, tournament_id)
     _insert_bracket(first_round, tournament_id)
+    if has_thug_finals:
+        _add_thug_final(tournament_id)
     return Match.query.filter(Match.tournament_id == tournament_id)
 
 
@@ -143,6 +162,19 @@ def _insert_bracket(first_round, tournament_id):
         match_queue.append(match)
 
 
+def _add_thug_final(tournament_id):
+    last_match = Match.query.filter(Match.tournament_id == tournament_id, Match.winner_match_id == None).first()
+    match = Match(
+        round=last_match.round + 1,
+        status=StatusEnum.NOT_STARTED,
+        tournament_id=tournament_id
+    )
+    db.session.add(match)
+    db.session.flush()
+    last_match.winner_match_id = match.match_id
+    db.session.flush()
+
+
 def _get_bracket_size(participants_size):
     """
     Calculates the bracket size (next biggest power of 2)
@@ -154,7 +186,7 @@ def _generate_seeded_order(size):
     """
     Generates the seeded order for a given size.
     """
-    rounds = int(math.log(size)/math.log(2))
+    rounds = int(math.log(size) / math.log(2))
     placements = [1, 2]
     for i in range(1, rounds):
         placements = _next_layer(placements)
@@ -171,4 +203,3 @@ def _next_layer(placements):
         out.append(p)
         out.append(length - p)
     return out
-

@@ -54,6 +54,7 @@ class TournamentSchema(SQLAlchemySchema):
     tournament_description = \
         fields.String(required=True, validate=validate.Length(max=Tournament.TOURNAMENT_DESCRIPTION_LENGTH))
     is_seeded = fields.Boolean(required=True)
+    has_thug_finals = fields.Boolean(required=True)
     date = fields.DateTime()
     matches = fields.List(fields.Nested(MatchSchema))
     participants = fields.List(fields.Nested(ParticipantSchema), required=True)

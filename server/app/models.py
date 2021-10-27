@@ -25,6 +25,7 @@ class Tournament(db.Model):
     tournament_name = db.Column(db.String(TOURNAMENT_NAME_LENGTH))
     tournament_description = db.Column(db.String(TOURNAMENT_DESCRIPTION_LENGTH))
     is_seeded = db.Column(db.Boolean(), default=False)
+    has_thug_finals = db.Column(db.Boolean(), default=False)
     date = db.Column(db.DateTime(), default=datetime.utcnow)
     status = db.Column(db.Enum(StatusEnum))
 

@@ -42,6 +42,7 @@ export interface Tournament {
   tournament_name: string;
   tournament_description: string;
   is_seeded: boolean;
+  has_thug_finals: boolean;
   date: null | Date;
   matches: null | Match[];
   participants: Participant[];

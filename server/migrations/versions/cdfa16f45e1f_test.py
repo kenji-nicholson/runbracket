@@ -1,8 +1,8 @@
-"""Initial migration
+"""Test
 
-Revision ID: 9c35732d1d52
+Revision ID: cdfa16f45e1f
 Revises: 
-Create Date: 2021-09-20 21:46:45.122829
+Create Date: 2021-10-26 21:26:39.648520
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9c35732d1d52'
+revision = 'cdfa16f45e1f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,6 +25,8 @@ def upgrade():
     sa.Column('email', sa.String(length=255), nullable=True),
     sa.Column('display_name', sa.String(length=50), nullable=True),
     sa.Column('password_hash', sa.String(length=128), nullable=True),
+    sa.Column('register_date', sa.DateTime(), nullable=True),
+    sa.Column('dark_mode', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('user_id')
     )
     op.create_table('tournament',
@@ -33,6 +35,7 @@ def upgrade():
     sa.Column('tournament_name', sa.String(length=255), nullable=True),
     sa.Column('tournament_description', sa.String(length=500), nullable=True),
     sa.Column('is_seeded', sa.Boolean(), nullable=True),
+    sa.Column('has_thug_finals', sa.Boolean(), nullable=True),
     sa.Column('date', sa.DateTime(), nullable=True),
     sa.Column('status', sa.Enum('NOT_STARTED', 'IN_PROGRESS', 'COMPLETED', name='statusenum'), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.user_id'], ),
@@ -53,6 +56,7 @@ def upgrade():
     sa.Column('date', sa.DateTime(), nullable=True),
     sa.Column('participant_a_score', sa.Integer(), nullable=True),
     sa.Column('participant_b_score', sa.Integer(), nullable=True),
+    sa.Column('winner_id', sa.Integer(), nullable=True),
     sa.Column('participant_a_id', sa.Integer(), nullable=True),
     sa.Column('participant_b_id', sa.Integer(), nullable=True),
     sa.Column('tournament_id', sa.Integer(), nullable=True),
@@ -60,6 +64,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['participant_a_id'], ['participant.participant_id'], ),
     sa.ForeignKeyConstraint(['participant_b_id'], ['participant.participant_id'], ),
     sa.ForeignKeyConstraint(['tournament_id'], ['tournament.tournament_id'], ),
+    sa.ForeignKeyConstraint(['winner_id'], ['participant.participant_id'], ),
     sa.ForeignKeyConstraint(['winner_match_id'], ['match.match_id'], ),
     sa.PrimaryKeyConstraint('match_id')
     )

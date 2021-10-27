@@ -103,11 +103,11 @@ export const LoginView: React.FC<Props> = () => {
           </UserInfoSubmit>
           <Grid container>
             <Grid item xs>
-              {/* 
-              <Link href="#" variant="body2">
-              Forgot password?
-              </Link>
-            */}
+              {
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              }
             </Grid>
             <Grid item>
               <Link
@@ -117,7 +117,7 @@ export const LoginView: React.FC<Props> = () => {
                   push("/register");
                 }}
               >
-                {"Don't have an account? Click here to register."}
+                {"Don't have an account? Sign up."}
               </Link>
             </Grid>
           </Grid>
