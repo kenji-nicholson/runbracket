@@ -6,6 +6,7 @@ import { Match, Tournament } from "../../../app/services/tournament";
 import SectionHeader from "../../Forms/SectionHeader";
 import { Bracket, RoundProps } from "react-brackets";
 import BracketSeed from "./BracketSeed";
+import { useForceUpdate } from "../../../hooks/store";
 
 interface Props {
   tournament: Tournament;
@@ -13,12 +14,15 @@ interface Props {
 
 const TournamentBracket: React.FC<Props> = (props) => {
   const { tournament } = props;
+  const forceUpdate = useForceUpdate();
 
   const sorted = tournament.matches
     ? tournament.matches.sort(function (a, b) {
         return (a.match_id ?? 0) - (b.match_id ?? 0);
       })
     : [];
+
+  console.log(sorted);
 
   const result =
     sorted.length > 0
@@ -29,6 +33,7 @@ const TournamentBracket: React.FC<Props> = (props) => {
           if (!temp)
             r.push((temp = { title: match.round.toString(), seeds: [] }));
           temp.seeds.push(match);
+          forceUpdate();
           return r;
         }, [] as RoundProps[])
       : ([] as RoundProps[]);
