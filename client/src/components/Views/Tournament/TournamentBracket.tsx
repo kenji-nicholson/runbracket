@@ -18,12 +18,12 @@ const TournamentBracket: React.FC<Props> = (props) => {
   const [currentTournament, setCurrentTournament] = useState<RoundProps[]>([]);
 
   useEffect(() => {
-    const sorted = tournament.matches
+    let sorted = tournament.matches
       ? [...tournament.matches].sort(function (a, b) {
           return (a.match_id ?? 0) - (b.match_id ?? 0);
         })
       : [];
-    const result =
+    let result =
       sorted.length > 0
         ? sorted.reduce<RoundProps[]>((r, match) => {
             var temp = r.find(
