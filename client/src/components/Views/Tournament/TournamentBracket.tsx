@@ -1,7 +1,7 @@
 import { Divider, Grid, Typography } from "@mui/material";
 import { palette } from "@mui/system";
 import moment from "moment";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Match, Tournament } from "../../../app/services/tournament";
 import SectionHeader from "../../Forms/SectionHeader";
 import { Bracket, RoundProps } from "react-brackets";
@@ -14,29 +14,33 @@ interface Props {
 
 const TournamentBracket: React.FC<Props> = (props) => {
   const { tournament } = props;
-  const forceUpdate = useForceUpdate();
 
-  const sorted = tournament.matches
-    ? tournament.matches.sort(function (a, b) {
-        return (a.match_id ?? 0) - (b.match_id ?? 0);
+  const [currentTournament, setCurrentTournament] = useState<RoundProps[]>([]);
+
+  useEffect(() => {
+    const sorted = tournament.matches
+      ? tournament.matches.sort(function (a, b) {
+          return (a.match_id ?? 0) - (b.match_id ?? 0);
+        })
+      : [];
+    const result =
+      sorted.length > 0
+        ? sorted.reduce<RoundProps[]>((r, match) => {
+            var temp = r.find(
+              (o: RoundProps) => o.title == match.round.toString()
+            );
+            if (!temp)
+              r.push((temp = { title: match.round.toString(), seeds: [] }));
+            temp.seeds.push(match);
+            return r;
+          }, [] as RoundProps[])
+        : ([] as RoundProps[]);
+    setCurrentTournament(
+      result.sort(function (a, b) {
+        return a.title.localeCompare(b.title);
       })
-    : [];
-
-  console.log(sorted);
-
-  const result =
-    sorted.length > 0
-      ? sorted.reduce<RoundProps[]>((r, match) => {
-          var temp = r.find(
-            (o: RoundProps) => o.title == match.round.toString()
-          );
-          if (!temp)
-            r.push((temp = { title: match.round.toString(), seeds: [] }));
-          temp.seeds.push(match);
-          forceUpdate();
-          return r;
-        }, [] as RoundProps[])
-      : ([] as RoundProps[]);
+    );
+  }, [tournament]);
 
   return (
     <>
@@ -45,11 +49,11 @@ const TournamentBracket: React.FC<Props> = (props) => {
           <SectionHeader>Bracket</SectionHeader>
         </Grid>
         <Grid item xs={12}>
-          {result.length === 0 ? (
+          {currentTournament.length === 0 ? (
             <Typography>No bracket available.</Typography>
           ) : (
             <Bracket
-              rounds={result}
+              rounds={currentTournament}
               roundTitleComponent={(
                 title: React.ReactNode,
                 roundIndex: number
