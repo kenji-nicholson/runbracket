@@ -18,23 +18,17 @@ const TournamentBracket: React.FC<Props> = (props) => {
   const [currentTournament, setCurrentTournament] = useState<RoundProps[]>([]);
 
   useEffect(() => {
-    let sorted = tournament.matches
-      ? [...tournament.matches].sort(function (a, b) {
-          return (a.match_id ?? 0) - (b.match_id ?? 0);
-        })
-      : [];
-    let result =
-      sorted.length > 0
-        ? sorted.reduce<RoundProps[]>((r, match) => {
-            var temp = r.find(
-              (o: RoundProps) => o.title == match.round.toString()
-            );
-            if (!temp)
-              r.push((temp = { title: match.round.toString(), seeds: [] }));
-            temp.seeds.push(match);
-            return r;
-          }, [] as RoundProps[])
-        : ([] as RoundProps[]);
+    let result = tournament.matches
+      ? tournament.matches.reduce<RoundProps[]>((r, match) => {
+          var temp = r.find(
+            (o: RoundProps) => o.title == match.round.toString()
+          );
+          if (!temp)
+            r.push((temp = { title: match.round.toString(), seeds: [] }));
+          temp.seeds.push(match);
+          return r;
+        }, [] as RoundProps[])
+      : ([] as RoundProps[]);
     setCurrentTournament(
       result.sort(function (a, b) {
         return a.title.localeCompare(b.title);
