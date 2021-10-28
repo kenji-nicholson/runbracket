@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { palette } from "@mui/system";
 import moment from "moment";
-import React from "react";
-import { Tournament } from "../../../app/services/tournament";
+import React, { useEffect, useState } from "react";
+import { Participant, Tournament } from "../../../app/services/tournament";
 import SectionHeader from "../../Forms/SectionHeader";
 import ParticipantRow from "./ParticipantRow";
 
@@ -20,6 +20,17 @@ interface Props {
 
 const TournamentParticipants: React.FC<Props> = (props) => {
   const { tournament } = props;
+  const [participants, setParticipants] = useState<Participant[]>([]);
+
+  useEffect(() => {
+    if (tournament.participants) {
+      setParticipants(
+        tournament.participants.sort(function (a, b) {
+          return (a.seed ?? 0) - (b.seed ?? 0);
+        })
+      );
+    }
+  }, [tournament]);
 
   const tournament_date = tournament.date
     ? moment.utc(tournament.date).local().format("MMM Do, YYYY")
@@ -39,7 +50,7 @@ const TournamentParticipants: React.FC<Props> = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tournament.participants.map((item) => {
+              {participants.map((item) => {
                 return (
                   <ParticipantRow
                     key={item.participant_id}
