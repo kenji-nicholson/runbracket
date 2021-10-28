@@ -61,7 +61,7 @@ def _advance_random_participant(match, participants, winner):
 
 
 def _get_random_participant(participants, exception):
-    possible_choices = [p for p in participants if p != exception]
+    possible_choices = [p for p in participants if p.participant_id != exception]
     return random.choice(possible_choices)
 
 

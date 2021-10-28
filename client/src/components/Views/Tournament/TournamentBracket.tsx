@@ -24,6 +24,10 @@ const TournamentBracket: React.FC<Props> = (props) => {
       }, [] as RoundProps[])
     : ([] as RoundProps[]);
 
+  const sorted = result.sort(function (a, b) {
+    return a.title.localeCompare(b.title);
+  });
+
   return (
     <>
       <Grid container spacing={2}>
@@ -35,7 +39,7 @@ const TournamentBracket: React.FC<Props> = (props) => {
             <Typography>No bracket available.</Typography>
           ) : (
             <Bracket
-              rounds={result}
+              rounds={sorted}
               roundTitleComponent={(
                 title: React.ReactNode,
                 roundIndex: number
