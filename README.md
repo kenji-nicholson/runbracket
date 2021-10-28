@@ -4,6 +4,7 @@ Deployed at https://runbracket.herokuapp.com
 
 ## Features
 - User registration and login using JSON web tokens between front and back end
+- Persistent login using redux-persist and refresh JWTs.
 - Utilizes MUI to provide dark mode in user settings page
 - Tournament creation algorithm handles single elimination tournaments
 - Supports seeded and unseeded tournaments.
