@@ -30,7 +30,7 @@ def create_app(config_class=Config):
     :return: The constructed application
     """
 
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='./client/build', static_url_path='/')
     app.config.from_object(config_class)
 
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=30)
