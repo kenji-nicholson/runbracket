@@ -25,6 +25,7 @@ class Tournament(db.Model):
     tournament_name = db.Column(db.String(TOURNAMENT_NAME_LENGTH))
     tournament_description = db.Column(db.String(TOURNAMENT_DESCRIPTION_LENGTH))
     matches = db.relationship("Match", order_by="Match.match_id")
+    participants = db.relationship("Participant", order_by="Participant.seed")
     is_seeded = db.Column(db.Boolean(), default=False)
     has_thug_finals = db.Column(db.Boolean(), default=False)
     date = db.Column(db.DateTime(), default=datetime.utcnow)
@@ -67,7 +68,7 @@ class Participant(db.Model):
     seed = db.Column(db.Integer)
 
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.tournament_id'))
-    tournament = db.relationship('Tournament', backref='participants', foreign_keys=[tournament_id])
+    tournament = db.relationship('Tournament', foreign_keys=[tournament_id])
     
 
 class User(db.Model, PaginatedAPIMixin):
