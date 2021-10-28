@@ -9,6 +9,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { UserProfileView } from "./components/Views/UserProfile/UserProfileView";
 import TournamentsView from "./components/Views/Tournaments/TournamentsView";
 import TournamentView from "./components/Views/Tournament/TournamentView";
+import UsersView from "./components/Views/Users/Users";
 
 const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <Route exact component={RegisterView} path="/register" />
         <Route exact component={HomeView} path="/" />
         <Route exact component={TournamentsView} path="/tournaments" />
+        <Route exact component={UsersView} path="/users" />
         <ProtectedRoute
           exact
           component={CreateTournamentView}

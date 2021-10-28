@@ -144,6 +144,11 @@ const NavigationBar = () => {
                     Tournaments
                   </Button>
                 </Grid>
+                <Grid item>
+                  <Button color="primary" onClick={() => push("/users")}>
+                    Users
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
             <Grid item>
