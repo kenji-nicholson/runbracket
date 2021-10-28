@@ -25,7 +25,7 @@ const TournamentBracket: React.FC<Props> = (props) => {
     : ([] as RoundProps[]);
 
   const sorted = result.sort(function (a, b) {
-    return a.title.localeCompare(b.title);
+    return parseInt(a.title) - parseInt(b.title);
   });
 
   return (
