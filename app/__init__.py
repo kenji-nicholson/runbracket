@@ -7,7 +7,7 @@ from datetime import timedelta
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
@@ -30,7 +30,7 @@ def create_app(config_class=Config):
     :return: The constructed application
     """
 
-    app = Flask(__name__, static_folder='./client/build', static_url_path='/')
+    app = Flask(__name__, static_folder='../client/build', static_url_path='/')
     app.config.from_object(config_class)
 
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=30)
@@ -41,9 +41,6 @@ def create_app(config_class=Config):
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
     app.config['CORS_HEADERS'] = 'Content-Type'
     jwt.init_app(app)
-
-    from app.main import bp as main_bp
-    app.register_blueprint(main_bp)
 
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
@@ -83,5 +80,17 @@ def create_app(config_class=Config):
 
         app.logger.setLevel(logging.INFO)
         app.logger.info('PP3 startup')
+
+        @app.route('/')
+        def index():
+            return app.send_static_file('index.html')
+
+        @app.errorhandler(404)
+        def not_found(err):
+            return app.send_static_file('index.html')
+
+        @app.route('/favicon.ico')
+        def favicon():
+            return send_from_directory('favicon.ico')
 
     return app

@@ -112,31 +112,33 @@ const NavigationBar = () => {
         <Toolbar>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item>
-              <HomeLink to="/">
-                <Typography
-                  display="inline"
-                  variant="h5"
-                  sx={{
-                    color: "text.primary",
-                    fontWeight: 500,
-                  }}
-                >
-                  RUN
-                </Typography>
-                <Typography
-                  display="inline"
-                  variant="h5"
-                  sx={{
-                    color: "primary.main",
-                    fontWeight: 500,
-                  }}
-                >
-                  BRACKET
-                </Typography>
-              </HomeLink>
-            </Grid>
-            <Grid item>
-              <Grid container>
+              <Grid container alignItems="center" spacing={3}>
+                <Grid item>
+                  <HomeLink to="/">
+                    <Typography
+                      display="inline"
+                      variant="h4"
+                      sx={{
+                        color: "text.primary",
+                        fontWeight: 500,
+                        fontFamily: "Righteous",
+                      }}
+                    >
+                      run
+                    </Typography>
+                    <Typography
+                      display="inline"
+                      variant="h4"
+                      sx={{
+                        color: "primary.main",
+                        fontWeight: 500,
+                        fontFamily: "Righteous",
+                      }}
+                    >
+                      bracket
+                    </Typography>
+                  </HomeLink>
+                </Grid>
                 <Grid item>
                   <Button color="primary" onClick={() => push("/tournaments")}>
                     Tournaments
@@ -144,9 +146,12 @@ const NavigationBar = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item alignSelf="center">
-              {loginSection}
+            <Grid item>
+              <Grid container>
+                <Grid item></Grid>
+              </Grid>
             </Grid>
+            <Grid item>{loginSection}</Grid>
           </Grid>
         </Toolbar>
       </AppBar>

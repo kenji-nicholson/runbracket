@@ -50,7 +50,7 @@ const TournamentsView = () => {
             <title>Tournaments - RunBracket</title>
           </Helmet>
           <Grid container spacing={3} paddingBottom={1}>
-            <Grid item xs={9}>
+            <Grid item xs={12} sm={9}>
               <PageTitle>Tournaments</PageTitle>
             </Grid>
             <Grid alignSelf="center" item xs={3}>
