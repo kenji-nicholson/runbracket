@@ -24,6 +24,7 @@ class Tournament(db.Model):
     tournament_id = db.Column(db.Integer, primary_key=True)
     tournament_name = db.Column(db.String(TOURNAMENT_NAME_LENGTH))
     tournament_description = db.Column(db.String(TOURNAMENT_DESCRIPTION_LENGTH))
+    matches = db.relationship("Match", order_by="Match.match_id")
     is_seeded = db.Column(db.Boolean(), default=False)
     has_thug_finals = db.Column(db.Boolean(), default=False)
     date = db.Column(db.DateTime(), default=datetime.utcnow)
@@ -49,7 +50,7 @@ class Match(db.Model):
     participant_b_id = db.Column(db.Integer, db.ForeignKey('participant.participant_id'))
     participant_b = db.relationship('Participant', foreign_keys=[participant_b_id])
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.tournament_id'))
-    tournament = db.relationship('Tournament', backref=backref('matches', lazy='dynamic'),
+    tournament = db.relationship('Tournament',
                                  foreign_keys=[tournament_id])
     status = db.Column(db.Enum(StatusEnum))
 

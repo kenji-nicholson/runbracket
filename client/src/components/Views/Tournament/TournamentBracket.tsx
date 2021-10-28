@@ -19,7 +19,7 @@ const TournamentBracket: React.FC<Props> = (props) => {
 
   useEffect(() => {
     const sorted = tournament.matches
-      ? tournament.matches.sort(function (a, b) {
+      ? [...tournament.matches].sort(function (a, b) {
           return (a.match_id ?? 0) - (b.match_id ?? 0);
         })
       : [];
