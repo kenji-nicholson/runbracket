@@ -1,6 +1,8 @@
 # RunBracket
 Deployed at https://runbracket.herokuapp.com
 
+# Usage
+To run: `python3 pp3.py`
 
 ## Features
 - User registration and login using JSON web tokens between front and back end
